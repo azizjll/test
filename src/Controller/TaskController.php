@@ -15,5 +15,4 @@ class TaskController extends AbstractController
             'controller_name' => 'TaskController',
         ]);
     }
-    
 }
