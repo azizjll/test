@@ -3,8 +3,158 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+      <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Section Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="canvas-close">
+            <i class="fa fa-close"></i>
+        </div>
+        
+        <div id="mobile-menu-wrap"></div>
+        <div class="canvas-social">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-youtube-play"></i></a>
+            <a href="#"><i class="fa fa-instagram"></i></a>
+        </div>
+    </div>
+    <!-- Offcanvas Menu Section End -->
+
+    <!-- Header Section Begin -->
+    <header class="header-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="logo">
+                        <a href="./index.html">
+                            <img src="img/logo.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-9">
+                    <div class="top-option">
+                        <div class="to-search search-switch">
+                            <i class="fa fa-search"></i>
+                        </div>
+                        <div class="to-social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-youtube-play"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas-open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <!-- Formulaire de Login -->
+    
+
+    
+    <!-- Hero Section End -->
+    
+
+    <!-- ChoseUs Section Begin -->
+    <section class="choseus-section spad">
+        <div class="container">
+                
+                    <h1>Inscription</h1>
+
+                    {# Afficher les éventuelles erreurs du formulaire #}
+    
+                    {{ form_start(form) }}
+
+                        <div class="fs-widget">
+                            <h4>Pseudo</h4>
+                            {{ form_row(form.Username, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputUsername', 'autocomplete': 'username', 'required': 'required', 'autofocus': 'autofocus'}}) }}
+                        </div>
+
+                        <div class="fs-widget">
+                            <h4>Email</h4>
+                            {{ form_row(form.email, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputEmail', 'autocomplete': 'email', 'required': 'required'}}) }}
+                        </div>
+
+                        <div class="fs-widget">
+                            <h4>Mot de passe</h4>
+                            {{ form_row(form.password.first, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputPassword', 'autocomplete': 'new-password', 'required': 'required'}}) }}
+                        </div>
+
+                        <div class="fs-widget">
+                            <h4>Confirmation</h4>
+                            {{ form_row(form.password.second, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputConfirmation', 'autocomplete': 'new-password', 'required': 'required'}}) }}
+                        </div>
+
+                    {{ form_end(form) }}
+
+                        
+                
+        </div>
+    </section>
+    <!-- ChoseUs Section End -->
+
      
-    <h1>Inscription</h1>
+    
+
+    
+
+    
+
+    
+
+    <!-- Get In Touch Section Begin -->
+    <div class="gettouch-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-map-marker"></i>
+                        <p>333 Middle Winchendon Rd, Rindge,<br/> NH 03461</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-mobile"></i>
+                        <ul>
+                            <li>125-711-811</li>
+                            <li>125-668-886</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text email">
+                        <i class="fa fa-envelope"></i>
+                        <p>Support.gymcenter@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Get In Touch Section End -->
+
+    {% include 'footer.html.twig' %}
+
+    <!-- Search model Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search model end -->
+   
 
         {# Afficher les éventuelles erreurs du formulaire #}
     

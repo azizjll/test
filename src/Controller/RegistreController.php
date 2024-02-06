@@ -39,12 +39,14 @@ class RegistreController extends AbstractController
             $entityManager = $managerRegistry ->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+
+            //sendemail
             
             return $this->redirectToRoute('app_login');
         }
         
-        return $this->renderForm('registre/index.html.twig', [
-            'form' => $form 
+        return $this->render('registre/index.html.twig', [
+            'form' => $form->createView(),
         ]);
         //return $this->render('registre/index.html.twig', [
        //     'controller_name' => 'RegistreController',
