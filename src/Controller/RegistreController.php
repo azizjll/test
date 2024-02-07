@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\SendMailService;
 use Doctrine\Persistence\ManagerRegistry;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,7 @@ class RegistreController extends AbstractController
         $this->userPasswordEncoderInterface=$userPasswordEncoderInterface;
     }
     #[Route('/registre', name: 'app_registre')]
-    public function RegisterUser(ManagerRegistry $managerRegistry, Request $request): Response
+    public function RegisterUser(ManagerRegistry $managerRegistry, Request $request,SendMailService $mail): Response
     {
 
         if ($this->getUser()) {
@@ -41,6 +42,14 @@ class RegistreController extends AbstractController
             $entityManager->flush();
 
             //sendemail
+            $mail->send(
+                'no-reply@monsite.com',
+                $user->getEmail(),
+                'Activation de votre compte',
+                'register',
+                compact('user')
+                
+            );
             
             return $this->redirectToRoute('app_login');
         }

@@ -9,6 +9,7 @@
     <div id="preloder">
         <div class="loader"></div>
     </div>
+    
 
     <!-- Offcanvas Menu Section Begin -->
     <div class="offcanvas-menu-overlay"></div>
@@ -116,14 +117,28 @@
             <div class="canvas-open">
                 <i class="fa fa-bars"></i>
             </div>
+            
         </div>
+        
+        
     </header>
+    
     <!-- Header End -->
 
   
 
     <!-- ChoseUs Section Begin -->
     <section class="choseus-section spad">
+        <div class="fs-widget d-flex justify-content-center">
+            {% if app.user and app.user.isVerified == false  %}
+                <div class="alert alert-warning alert-dismissible w-50" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                    <div class="alert-message">
+                        <strong>Votre compte est activé</strong>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -401,7 +416,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                    <div class="fs-widget">
+                    <div x>
                         <h4>Tips & Guides</h4>
                         <div class="fw-recent">
                             <h6><a href="#">Physical fitness may help prevent depression, anxiety</a></h6>
