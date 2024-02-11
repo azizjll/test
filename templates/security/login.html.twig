@@ -55,12 +55,15 @@
                 <i class="fa fa-bars"></i>
             </div>
         </div>
+        <div class="fs-widget d-flex justify-content-center">
+           
+    </div>
+        
     </header>
     <!-- Header End -->
 
     <!-- Formulaire de Login -->
     
-
     
     <!-- Hero Section End -->
     
@@ -68,11 +71,23 @@
     <!-- ChoseUs Section Begin -->
     <section class="choseus-section spad">
         <div class="container">
-                <form method="post">
-                        {% if error %}
-                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                        {% endif %}
 
+                 {% for message in app.flashes('danger') %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                {% endfor %}
+
+                {% for message in app.flashes('Success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            
+                <form method="post">
+
+                    {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+                        
                        
 
                         <div class="fs-widget">

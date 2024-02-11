@@ -137,7 +137,18 @@
                         <strong>Votre compte est activé</strong>
                     </div>
                 </div>
+                
             {% endif %}
+
+            {% for message in app.flashes('Success') %}
+                            <div class="alert alert-warning alert-dismissible w-50" role="alert">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                                {{ message }}
+                            </div>
+            {% endfor %}
+            
+            
+           
         </div>
         <div class="container">
             <div class="row">
@@ -373,7 +384,6 @@
     </div>
     <!-- Get In Touch Section End -->
 
-    <!-- Footer Section Begin -->
     <section class="footer-section">
         <div class="container">
             <div class="row">
@@ -416,7 +426,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                    <div x>
+                    <div class="fs-widget">
                         <h4>Tips & Guides</h4>
                         <div class="fw-recent">
                             <h6><a href="#">Physical fitness may help prevent depression, anxiety</a></h6>
