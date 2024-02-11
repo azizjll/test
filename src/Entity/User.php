@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -35,6 +36,17 @@ class User implements UserInterface
     #[ORM\Column]
     private ?bool $is_verified = false;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $DateNaissance = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Numero = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $Cin = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $etat = null;
     
 
     public function getId(): ?int
@@ -117,6 +129,56 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getDateNaissance(): ?\DateTimeInterface
+    {
+        return $this->DateNaissance;
+    }
+
+    public function setDateNaissance(\DateTimeInterface $DateNaissance): static
+    {
+        $this->DateNaissance = $DateNaissance;
+
+        return $this;
+    }
+
+    public function getNumero(): ?string
+    {
+        return $this->Numero;
+    }
+
+    public function setNumero(string $Numero): static
+    {
+        $this->Numero = $Numero;
+
+        return $this;
+    }
+
+    public function getCin(): ?int
+    {
+        return $this->Cin;
+    }
+
+    public function setCin(?int $Cin): static
+    {
+        $this->Cin = $Cin;
+
+        return $this;
+    }
+
+    public function getEtat(): ?bool
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?bool $etat): self
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+
 
     /**
      * Returning a salt is only needed, if you are not using a modern

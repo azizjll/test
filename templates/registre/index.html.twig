@@ -94,6 +94,20 @@
                             <h4>Confirmation</h4>
                             {{ form_row(form.password.second, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputConfirmation', 'autocomplete': 'new-password', 'required': 'required'}}) }}
                         </div>
+                        <div class="fs-widget">
+                            <h4>Date de naissance</h4>
+                            {{ form_row(form.DateNaissance, {'label': false}) }}
+                        </div>
+                        <div class="fs-widget">
+                            <h4>Rôles</h4>
+                            {{ form_row(form.roles, {'label': false}) }}
+                        </div>
+                       {% if form.Numero is defined %}
+                        <div class="fs-widget">
+                            <h4>Numéro de carte</h4>
+                            {{ form_widget(form.Numero, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        {% endif %}
 
                     {{ form_end(form) }}
 
@@ -157,20 +171,6 @@
    
 
         {# Afficher les éventuelles erreurs du formulaire #}
-    
-    {{ form_start(form) }}
-    
-   
-    {{ form_end(form) }}
-    
-
-     
-    
-
-    
-
-    
-
     
 
     

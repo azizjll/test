@@ -33,12 +33,15 @@ class RegistreController extends AbstractController
         }
         
         $user = new User;
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() and $form->isValid()) {
            
             $password_hashed=$this->userPasswordEncoderInterface->encodePassword($user,$user->getPassword());
             $user->setPassword($password_hashed);
+            // Accès aux rôles de l'utilisateur
+            $user->getRoles();
             $user =$form->getData(); 
             $entityManager = $managerRegistry ->getManager();
             $entityManager->persist($user);

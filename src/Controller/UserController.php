@@ -15,4 +15,12 @@ class UserController extends AbstractController
             'controller_name' => 'TaskController',
         ]);
     }
+
+    #[Route('/back', name: 'app_back')]
+    public function back(): Response
+    {
+        return $this->render('task/back.html.twig', [
+            'controller_name' => 'TaskController',
+        ]);
+    }
 }
