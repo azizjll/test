@@ -130,7 +130,7 @@
     <!-- ChoseUs Section Begin -->
     <section class="choseus-section spad">
         <div class="fs-widget d-flex justify-content-center">
-            {% if app.user and app.user.isVerified == false  %}
+            {% if app.user and app.user.isVerified == true  %}
                 <div class="alert alert-warning alert-dismissible w-50" role="alert">
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
                     <div class="alert-message">
@@ -140,9 +140,30 @@
                 
             {% endif %}
 
+             {% if app.user and app.user.isVerified == false  %}
+                
+                        <div class="alert alert-warning alert-dismissible w-50" role="alert">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                                <div class="alert-message">
+                                    <strong>Votre compte n'est pas activé</strong>
+                                <a href="{{ path('resend_verif') }}">renvoyer le lien d'activation</a>
+                                </div>
+                                    
+                                    
+                        </div>
+                     
+                
+            {% endif %}
+
             {% for message in app.flashes('Success') %}
                             <div class="alert alert-warning alert-dismissible w-50" role="alert">
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                                {{ message }}
+                            </div>
+            {% endfor %}
+            {% for message in app.flashes('Warning') %}
+                            <div class="alert alert-warning alert-dismissible w-50" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
                                 {{ message }}
                             </div>
             {% endfor %}

@@ -24,12 +24,18 @@ class UserType extends AbstractType
     {
         $builder
             ->add('Username',TextType::class,["label" => "Pseudo"])
-            ->add('email',EmailType::class,["label" => "Email"])
+            ->add('email',EmailType::class,["label" => "Email","attr" => [
+                'placeholder' => 'exemple@gmail.com'
+            ]])
             
             ->add('password',RepeatedType::class,[
                 "type" => PasswordType::class,
-                "first_options" => ["label" => "Mot de passe"],
-                "second_options" => ["label" => "Confirmation"]
+                "first_options" => ["label" => "Mot de passe","attr" => [
+                    'placeholder' => '********'
+                            ]],
+                "second_options" => ["label" => "Confirmation","attr" => [
+                    'placeholder' => '********'
+                            ]]
             ])
 
             ->add('DateNaissance', DateTimeType::class, [
@@ -67,19 +73,7 @@ class UserType extends AbstractType
                 
 
                 // Ajoutez le champ numéro de carte pour les coachs uniquement
-                if ($user && in_array('ROLE_COACH', $user->getRoles(), true)) {
-                    $form->add('Numero', TextType::class, [
-                        'constraints' => [
-                            new NotBlank([
-                                'message' => 'Please enter your phone number',
-                            ]),
-                            new Regex([
-                                'pattern' => '/^[0-9]{8}$/',
-                                'message' => 'Phone number must contain exactly 8 digits',
-                            ]),
-                        ],
-                    ]);
-                }
+               
 
             })
             ->add('valider',SubmitType::class);

@@ -27,6 +27,9 @@ class User implements UserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(length: 100)]
+    private ?string $resetToken = null;
+
     /**
      * @var string The hashed password
      */
@@ -74,6 +77,19 @@ class User implements UserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->Username;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+
+    public function setResetToken(string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
     }
 
     /**
