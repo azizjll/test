@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -12,7 +14,8 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-
+     
+        
        // Vérifie si un utilisateur est déjà connecté
     if ($this->getUser()) {
         // Vérifie si le compte de l'utilisateur est vérifié
@@ -21,12 +24,18 @@ class SecurityController extends AbstractController
                 'danger',
                 'Le compte n\'est pas vérifié ! Veuillez vérifier votre boîte de réception !'
             );
+            $error = $authenticationUtils->getLastAuthenticationError();
+            $lastUsername = $authenticationUtils->getLastUsername();
+            return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
         // Vérifie si le compte de l'utilisateur est bloqué
         } elseif (!$this->getUser()->getEtat()) {
             $this->addFlash(
                 'danger',
                 'Votre compte est bloqué !'
             );
+            $error = $authenticationUtils->getLastAuthenticationError();
+    $lastUsername = $authenticationUtils->getLastUsername();
+    return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
         } else {
             // Si le compte est vérifié et actif, redirige en fonction du rôle de l'utilisateur
             if (in_array('ROLE_CLIENT', $this->getUser()->getRoles())) {
@@ -34,13 +43,17 @@ class SecurityController extends AbstractController
                     'success',
                     'Connexion réussie en tant que client !'
                 );
+                $error = $authenticationUtils->getLastAuthenticationError();
+                $lastUsername = $authenticationUtils->getLastUsername();
                 return $this->redirectToRoute('app_task');
             } elseif (in_array('ROLE_COACH', $this->getUser()->getRoles())) {
                 $this->addFlash(
                     'success',
                     'Connexion réussie en tant que coach !'
                 );
-                return $this->redirectToRoute('app_back');
+                $error = $authenticationUtils->getLastAuthenticationError();
+                $lastUsername = $authenticationUtils->getLastUsername();
+                return $this->redirectToRoute('app_task');
             }
         }
     }
@@ -67,6 +80,7 @@ class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);*/
     }
+    
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout():Response

@@ -99,29 +99,17 @@
                             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
                     
-                     {% if app.user and app.user.isVerified == false  %}
-                
-                        <div class="alert alert-warning alert-dismissible w-50" role="alert">
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
-                                <div class="alert-message">
-                                    <strong>Votre compte n'est pas activé</strong>
+                     {% if app.user and app.user.isVerified == false %}
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" 
+                            aria-label="close"></button>
+                            <div class="alert-message">
+                                <strong>Votre compte n'est pas activé </strong>, 
                                 <a href="{{ path('resend_verif') }}">renvoyer le lien d'activation</a>
-                                </div>
-                                    
-                                    
-                        </div>
-                     
-                
-                     {% endif %}
-                     {% if app.user and app.user.isVerified == true  and app.user.etat == true %}
-                            <div class="alert alert-success alert-dismissible" role="alert">
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" 
-                                aria-label="close"></button>
-                                <div class="alert-message">
-                                    <strong>Votre compte est activé </strong>
-                                </div>
                             </div>
+                        </div>
                         {% endif %}
+                        
                         
                        
 

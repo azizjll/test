@@ -1,6 +1,6 @@
 {% extends 'task/back.html.twig' %}
 
-{% block title %}Liste des clients !{% endblock %}
+{% block title %}Liste des coach !{% endblock %}
 
 
 
@@ -122,6 +122,14 @@
                 <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Liste Client</span>
+            </a>
+          </li>
+           <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ path('app_list_Coach') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">liste coatch</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -420,9 +428,10 @@
                             <th> email</th>
                             <th> numero  </th>
                             <th> date naissance </th>
+                            <th> document </th>
                             <th> statut </th>
                             <th> Start Date </th>
-                            <th> Payment Status </th>
+                            
                           </tr>
                         </thead>
                         <tbody>
@@ -434,6 +443,13 @@
                             <td> {{client.email}}</td>
                             <td> {{client.numero}} </td>
                             <td> {{client.DateNaissance|date('d-m-Y')}} </td>
+                             <td>
+                                  {% if client.borchureFilename %}
+                                      <a href="{{ asset('uploads/brochures/' ~ client.borchureFilename) }}">Voir le document</a>
+                                  {% else %}
+                                      Pas de document
+                                  {% endif %}
+                              </td>
                             <td>{% if client.isVerified == 1 %}
                                 <button type="button" class="btn btn-sm btn-success">Compte vérifie</button>
                                 {% else %}

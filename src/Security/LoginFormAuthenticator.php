@@ -15,15 +15,26 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use App\Entity\User; // Import de l'entité User
+use Doctrine\ORM\EntityManagerInterface; // Import du gestionnaire d'entités
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+
+
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
+    
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    private EntityManagerInterface $entityManager;
+    private UrlGeneratorInterface $urlGenerator;
+
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator)
     {
+        $this->entityManager = $entityManager;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function authenticate(Request $request): Passport
@@ -31,6 +42,23 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $email = $request->request->get('email', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
+
+        $userRepository = $this->entityManager->getRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => $email]);
+        
+    
+       /* if (!$user || !$user->getIsVerified() || $user->getEtat() == 0) {
+        throw new CustomUserMessageAuthenticationException('L\'utilisateur n\'est pas vérifié ou est bloqué.');
+        }*/
+        
+
+        if(!$user->getIsVerified() ){
+            throw new CustomUserMessageAuthenticationException('L\'utilisateur n\'est pas vérifié .');
+            // last username entered by the user
+        }else{
+            if(!$user->getEtat())
+            throw new CustomUserMessageAuthenticationException('L\'utilisateur  est bloqué .');
+        }
 
         return new Passport(
             new UserBadge($email),
@@ -47,6 +75,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if($targetPath=$this->getTargetPath($request->getSession(),$firewallName)){      
             return new RedirectResponse($targetPath);
         }   
+
+        $user=$token->getUser();
+
+        
+
+        if(in_array('ROLE_ADMIN',$user->getRoles(),true)){
+            return new RedirectResponse($this->urlGenerator->generate('app_back'));
+        }
 
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));

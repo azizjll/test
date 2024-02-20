@@ -1,13 +1,8 @@
+{% extends 'task/back.html.twig' %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}Liste des clients !{% endblock %}
 
-<head>
-    <meta charset="utf-8">
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+
 
     {% block stylesheets %}
 
@@ -57,10 +52,10 @@
     {% endblock %}
 
    
-</head>
 
-<body>
 {% block body %}
+<body>
+
     <div class="container-scroller">
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
@@ -126,10 +121,10 @@
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
-              <span class="menu-title">liste clients</span>
+              <span class="menu-title">Liste Client</span>
             </a>
           </li>
-          <li class="nav-item menu-items">
+           <li class="nav-item menu-items">
             <a class="nav-link" href="{{ path('app_list_Coach') }}">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
@@ -420,34 +415,62 @@
                   <div class="card-body">
                     <h4 class="card-title">Order Status</h4>
                     <div class="table-responsive">
+                    {% for message in app.flashes('Success') %}
+                        <div class="alert alert-success" style="text-align:center;">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                       <table class="table">
                         <thead>
                           <tr>
-                            <th>
-                              
-                            </th>
-                            <th> Client Name </th>
-                            <th> Order No </th>
-                            <th> Product Cost </th>
-                            <th> Project </th>
-                            <th> Payment Mode </th>
+                            
+                            <th> nom </th>
+                            <th> email</th>
+                            <th> numero  </th>
+                            <th> date naissance </th>
+                            <th> document </th>
+                            <th> statut </th>
                             <th> Start Date </th>
-                            <th> Payment Status </th>
+                            
                           </tr>
                         </thead>
                         <tbody>
+                            {% for client in clients %}
                           <tr>
                             
                            
-                            <td> 02312 </td>
-                            <td> $14,500 </td>
-                            <td> Dashboard </td>
-                            <td> Credit card </td>
-                            <td> 04 Dec 2019 </td>
+                            <td> {{client.username}} </td>
+                            <td> {{client.email}}</td>
+                            <td> {{client.numero}} </td>
+                            <td> {{client.DateNaissance|date('d-m-Y')}} </td>
+                             <td>
+                                  {% if client.borchureFilename %}
+                                      <a href="{{ asset('uploads/brochures/' ~ client.borchureFilename) }}">Voir le document</a>
+                                  {% else %}
+                                      Pas de document
+                                  {% endif %}
+                              </td>
+                            <td>{% if client.isVerified == 1 %}
+                                <button type="button" class="btn btn-sm btn-success">Compte vérifie</button>
+                                {% else %}
+                                <div class="badge badge-outline-danger">Compte non vérifie</div>
+                              {% endif %}
+                            </td>
+                            <td>
+                              {% if client.etat == 1 %}
+                                <script src="{{asset('/js/script.js')}}"></script>
+                                <a id="myButton" type="button" class="btn btn-outline-danger" 
+                                    onclick="delayAction(event,this)" href="{{ path('app_block_client',{id : client.id}) }}">Bloqué client</a>
+                                {% else %}
+                                <script src="{{asset('/js/script.js')}}"></script>
+                                <a id="myButton" type="button" class="btn btn-outline-success" onclick="delayAction(event,this)"
+                                    href="{{ path('app_deblock_client',{id : client.id}) }}">Débloqué client</a>
+                              {% endif %}
+                              </td>
                            
                           </tr>
                          
-                            
+                           {% endfor %} 
                         </tbody>
                       </table>
                     </div>
@@ -461,4 +484,3 @@
 </body>
 {% endblock %}
 
-</html>

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+
+use App\Entity\User;
 use App\Form\ResetPasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Repository\UserRepository;
@@ -14,29 +16,47 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use App\Service\JWTService;
+use App\Form\UserType;
+
+
+
 
 class UserController extends AbstractController
 {
 
     private $userRepository;
+    private $tokenGenerator;
+    private $mail;
+    private $passwordEncoder;
+    private $jwt;
 
 
 
 
     public function __construct(
         UserRepository $userRepository,
+        TokenGeneratorInterface $tokenGenerator,
+        SendMailService $mail,
+        UserPasswordEncoderInterface $passwordEncoder,
+        JWTService $jwt,
         )
     {
         $this->userRepository=$userRepository;
+        $this->tokenGenerator = $tokenGenerator;
+        $this->mail = $mail;
+        $this->jwt = $jwt;
+        $this->passwordEncoder = $passwordEncoder;
+        
     }
 
     #[Route('/', name: 'app_task')]
     public function index(): Response
     {
-        return $this->render('task/index.html.twig', [
-            'controller_name' => 'TaskController',
-        ]);
+        return $this->render('task/index.html.twig'
+        );
     }
 
     #[Route('/back', name: 'app_back')]
@@ -51,10 +71,78 @@ class UserController extends AbstractController
     #[Route('/listClients', name: 'app_list_Clients')]
     public function listClients(): Response
     {
-        $clients=$this->userRepository->findAll();
+        $clients=$this->userRepository->findByRole('ROLE_CLIENT');
         return $this->render('listClients.html.twig', [
             'clients' => $clients,
         ]);
+    }
+    #[Route('/listCoach', name: 'app_list_Coach')]
+    public function listCoach(): Response
+    {
+        $clients=$this->userRepository->findByRole('ROLE_COACH');
+        return $this->render('listCoatch.html.twig', [
+            'clients' => $clients,
+        ]);
+    }
+
+    #[Route('/addClient', name: 'app_add_client')]
+    public function addClient(Request $request,SendMailService $mail,ManagerRegistry $managerRegistry)
+    {
+        $user = new User();
+
+    $form = $this->createForm(UserType::class, $user);
+    $form->handleRequest($request);
+
+    if($form->isSubmitted() && $form->isValid()){
+        $token = $this->tokenGenerator->generateToken();
+        $user->setResetToken($token);
+        $password_hashed = $this->passwordEncoder->encodePassword($user,$user->getPassword());
+        $user->setPassword($password_hashed);
+        $user->setEtat(true);
+        $user->setRoles(['ROLE_CLIENT']);
+        $user = $form->getData();
+
+        $entityManager = $managerRegistry ->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+        
+        // On génere le JWT de l'utilisateur 
+            // On crée le header
+            $header = [
+                'typ'=> 'JWT',
+                'alg' => 'HS256'
+            ];
+
+            // On crée le payload
+            $payload = [
+                'user_id' => $user->getId()
+            ];
+
+            // On génère le token 
+            $token = $this->jwt->generate($header, $payload , $this->getParameter('app.jwtsecret'));
+             
+
+            // On envoie un mail
+            $mail->send(
+                'no-reply@monsite.com',
+                $user->getEmail(),
+                'Activation de votre compte',
+                'register',
+                compact('user','token')
+            );
+            
+            $this->addFlash(
+                'Success',
+                'Client added successfully! !'
+            );
+
+        return $this->redirectToRoute('app_list_Clients');
+
+    }
+
+    return $this->render('addClient.html.twig', [
+        'Client' => $form->createView(),
+    ]);
     }
 
     #[Route('/bloqueClient/{id}', name: 'app_block_client')]

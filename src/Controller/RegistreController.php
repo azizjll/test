@@ -12,11 +12,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class RegistreController extends AbstractController
 {
@@ -27,7 +29,7 @@ class RegistreController extends AbstractController
         $this->userPasswordEncoderInterface=$userPasswordEncoderInterface;
     }
     #[Route('/registre', name: 'app_registre')]
-    public function RegisterUser(ManagerRegistry $managerRegistry, Request $request,SendMailService $mail, JWTService  $jwt ,TokenGeneratorInterface $tokenGenerator): Response
+    public function RegisterUser(ManagerRegistry $managerRegistry, Request $request,SendMailService $mail, JWTService  $jwt ,TokenGeneratorInterface $tokenGenerator,SluggerInterface $slugger): Response
     {
 
         if ($this->getUser()) {
@@ -37,8 +39,33 @@ class RegistreController extends AbstractController
         $user = new User;
 
         $form = $this->createForm(UserType::class, $user);
+        
         $form->handleRequest($request);
         if ($form->isSubmitted() and $form->isValid()) {
+
+             /** @var UploadedFile $brochureFile */
+             $brochureFile=$form->get('brochure')->getData();
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $user->setBorchureFilename($newFilename);
+            }
            
             $password_hashed=$this->userPasswordEncoderInterface->encodePassword($user,$user->getPassword());
             $user->setPassword($password_hashed);
@@ -46,7 +73,7 @@ class RegistreController extends AbstractController
             $user->getRoles();
             $token = $tokenGenerator->generateToken();
             $user->setResetToken($token);
-            $user->setEtat(true);
+            $user->setEtat(false);
             $user =$form->getData(); 
             $entityManager = $managerRegistry ->getManager();
             $entityManager->persist($user);
@@ -111,8 +138,8 @@ class RegistreController extends AbstractController
         {
             //On récupère le payloas
             $payload = $jwt->getPayload($token);
-            //On récupère le user du token
-            $user = $userRepository->find($payload['user_id']);
+                //On récupère le user du token
+                $user = $userRepository->find($payload['user_id']);
 
             // On verifier que l'utisateur existe et n'a pas encore activé son compte
             if($user && !$user->getIsVerified()){
