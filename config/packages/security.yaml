@@ -23,7 +23,7 @@ security:
             logout:
                 path: app_logout
                 # where to redirect after logout
-                # target: app_any_route
+                target: app_task
 
             remember_me:
                 secret: '%kernel.secret%'
@@ -55,3 +55,7 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
+        role_hierarchy:
+            ROLE_COACH: ROLE_USER
+            ROLE_CLIENT: ROLE_USER 
+            ROLE_ADMIN: ROLE_ADMIN       

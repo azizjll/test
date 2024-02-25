@@ -1,0 +1,60 @@
+{% extends 'task/back.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="row w-100 m-0">
+                <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                    <div class="card col-lg-4 mx-auto">
+                        <div class="card-body px-5 py-5">
+                            <h3 class="card-title text-left mb-3">Inscription</h3>
+                            {{ form_start(Client, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                            <div class="fs-widget">
+                                <h4>Nom et prénom</h4>
+                                {{ form_row(Client.Username, {'label': false, 'attr': {'class': 'form-control p_input'}}) }}
+                            </div>
+
+                            <div class="fs-widget">
+                                <h4>Email</h4>
+                                {{ form_row(Client.email, {'label': false, 'attr': {'class': 'form-control p_input'}}) }}
+                            </div>
+
+                            <div class="fs-widget">
+                                <h4>Mot de passe</h4>
+                                {{ form_row(Client.password.first, {'label': false, 'attr': {'class': 'form-control p_input'}}) }}
+                            </div>
+
+                            <div class="fs-widget">
+                                <h4>Confirmation</h4>
+                                {{ form_row(Client.password.second, {'label': false, 'attr': {'class': 'form-control p_input'}}) }}
+                            </div>
+
+                            <div class="fs-widget">
+                                <h4>Date de naissance</h4>
+                                {{ form_row(Client.DateNaissance, {'label': false, 'attr': {'class': 'form-control p_input'}}) }}
+                            </div>
+
+                            <div class="fs-widget">
+                                <h4>Numéro de téléphone</h4>
+                                {{ form_row(Client.Numero, {'label': false, 'attr': {'class': 'form-control p_input'}}) }}
+                            </div>
+
+                            <div class="fs-widget">
+                                <h4>Documents : obligatoire pour les coachs - téléchargez votre diplôme</h4>
+                                {{ form_row(Client.brochure, {'label': false, 'attr': {'class': 'form-control-file'}}) }}
+                            </div>
+
+                            
+
+                            {{ form_end(Client) }}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
