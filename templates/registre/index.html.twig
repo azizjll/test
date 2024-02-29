@@ -68,38 +68,45 @@
     <!-- ChoseUs Section Begin -->
     <section class="choseus-section spad">
         <div class="container">
-                
-                    <h1>Inscription</h1>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                     <div class="section-title">
+                            
+                        <h2>Inscription</h2>
+                    </div>
+                    
 
                     {# Afficher les éventuelles erreurs du formulaire #}
     
                     {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
-
+                       
+                        
+                       
                         <div class="fs-widget">
                             <h4>Nom et prenom</h4>
-                            {{ form_row(form.Username, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputUsername', 'autocomplete': 'username', 'autofocus': 'autofocus'}}) }}
+                            {{ form_row(form.Username, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputUsername', 'autocomplete': 'username', 'autofocus': 'autofocus'}}) }}
                             
                         </div>
 
                         <div class="fs-widget">
                             <h4>Email</h4>
-                            {{ form_row(form.email, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputEmail', 'autocomplete': 'email', 'required': 'required'}}) }}
+                            {{ form_row(form.email, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputEmail', 'autocomplete': 'email', 'required': 'required'}}) }}
                             
                         </div>
 
                         <div class="fs-widget">
                             <h4>Mot de passe</h4>
-                            {{ form_row(form.password.first, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputPassword', 'autocomplete': 'new-password', 'required': 'required'}}) }}
+                            {{ form_row(form.password.first, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputPassword', 'autocomplete': 'new-password', 'required': 'required'}}) }}
                             
                         </div>
 
                         <div class="fs-widget">
                             <h4>Confirmation</h4>
-                            {{ form_row(form.password.second, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputConfirmation', 'autocomplete': 'new-password', 'required': 'required'}}) }}
+                            {{ form_row(form.password.second, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputConfirmation', 'autocomplete': 'new-password', 'required': 'required'}}) }}
                         </div>
                         <div class="fs-widget">
                             <h4>Date de naissance</h4>
-                            {{ form_row(form.DateNaissance, {'label': false}) }}
+                            {{ form_row(form.DateNaissance, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
                         </div>
                         <div class="fs-widget">
                             <h4>Rôles</h4>
@@ -108,17 +115,31 @@
                        
                         <div class="fs-widget">
                             <h4>Numéro de téléphone</h4>
-                            {{ form_row(form.Numero, {'label': false,'attr': {'class': 'form-control'}}) }}
+                            {{ form_row(form.Numero, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
                         </div>
                        
                         <div class="fs-widget">
                             <h4>documents: Obligatoire pour les coachs téléchargeaient votre diplôme </h4>
-                            {{ form_row(form.brochure, {'label': false})  }}
+                            {{ form_row(form.brochure, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}})  }}
                         </div>
 
+                         <div class="fs-widget">
+                            <h4>Image</h4>
+                            {{ form_row(form.imageUrl, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
+                        </div>
+
+                         <button class="btn btn-lg btn-primary  " type="submit" style="width:600px;background-color: #E36414; border-color: orange;padding-bottom: 10px;">
+                            valider
+                        </button>
+                         <a href="{{ path('app_task') }}" align="start"  ><b>Retour à la page d'accueil</b></a>
 
 
                     {{ form_end(form) }}
+
+
+
+                </div>
+            </div>
 
                         
                 
@@ -142,15 +163,15 @@
                 <div class="col-md-4">
                     <div class="gt-text">
                         <i class="fa fa-map-marker"></i>
-                        <p>333 Middle Winchendon Rd, Rindge,<br/> NH 03461</p>
+                        <p>Arian<br/> NH 03461</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="gt-text">
                         <i class="fa fa-mobile"></i>
                         <ul>
-                            <li>125-711-811</li>
-                            <li>125-668-886</li>
+                            <li>+216 95124032</li>
+                            <li>+216 40237834</li>
                         </ul>
                     </div>
                 </div>

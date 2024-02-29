@@ -80,6 +80,13 @@ class UserType extends AbstractType
                     ])
                 ],
             ])
+
+            ->add('imageUrl', FileType::class, [
+                'label' => 'Profile Picture',
+                'mapped' => false,
+                'required' => true, // Set this to false if the profile picture is not mandatory
+               
+            ])
             
             ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){
                 $user = $event->getData();
@@ -102,12 +109,11 @@ class UserType extends AbstractType
 
                 
 
-                // Ajoutez le champ numéro de carte pour les coachs uniquement
                
 
-            })
+            });
             
-            ->add('valider',SubmitType::class);
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void

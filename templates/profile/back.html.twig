@@ -1,0 +1,90 @@
+{% extends 'task/back.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="row w-100 m-0">
+                <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                    <div class="card col-lg-4 mx-auto">
+                        <div class="card-body px-5 py-5">
+                            <h3 class="card-title text-left mb-3">Ajouter Client</h3>
+                             {{ form_start(modifImage) }}
+                        <div class="fs-widget">
+                                <h4>Image</h4>
+                                {{ form_row(modifImage.imageUrl, {'label': false,'attr': {'class': 'form-control'}}) }}
+                                <button class="btn btn-lg btn-primary  " type="submit" >
+                            valider
+                                 </button>    
+                         </div>
+
+                    {{ form_end(modifImage) }}
+
+
+                    {{ form_start(form) }}
+                       
+                        
+                       
+                        <div class="fs-widget">
+                            <h4>Nom</h4>
+                            {{ form_row(form.Username, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputUsername', 'autocomplete': 'username', 'autofocus': 'autofocus'}}) }}
+                            
+                        </div>
+                       
+
+
+                        <div class="fs-widget">
+                            <h4>Date de naissance</h4>
+                            {{ form_row(form.DateNaissance, {'label': false,'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        
+                       
+                        <div class="fs-widget">
+                            <h4>Numéro de téléphone</h4>
+                            {{ form_row(form.Numero, {'label': false,'attr': {'class': 'form-control'}}) }}
+                        </div>
+
+                       
+                        
+
+                         <button class="btn btn-lg btn-primary  " type="submit" >
+                            valider
+                        </button>
+                         
+
+
+                    {{ form_end(form) }}
+
+                    <div>
+                    {{ form_start(passForm) }}
+                        <div class="fs-widget">
+                            <h4>S'il vous plait entrez votre mot de passe !</h4>
+                            {{ form_row(passForm.password.first, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputEmail', 'autocomplete': 'email', 'required': 'required'}}) }}
+                            
+                        </div>
+                        {{ form_errors(passForm.password,{'attr':{'class':'text-danger'}}) }}
+                        {{ form_errors(passForm.password,{'attr':{'class':'text-danger'}}) }}
+                        <div class="fs-widget">
+                            <h4>Confirmation votre mot de passe</h4>
+                            {{ form_row(passForm.password.second, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputEmail', 'autocomplete': 'email', 'required': 'required'}}) }}
+                        </div>
+                        
+                    
+                        <br>
+                        <button class="btn btn-lg btn-primary " type="submit" style="width:400px;background-color: #E36414; border-color: orange;">
+                                        changer mot de passe
+                        </button>
+
+                        <a href="{{ path('app_task') }}" align="start"  ><b>Retour à la page d'accueil</b></a>
+                    {{ form_end(passForm) }}
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

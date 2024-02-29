@@ -45,6 +45,7 @@ class RegistreController extends AbstractController
 
              /** @var UploadedFile $brochureFile */
              $brochureFile=$form->get('brochure')->getData();
+
             // this condition is needed because the 'brochure' field is not required
             // so the PDF file must be processed only when a file is uploaded
             if ($brochureFile) {
@@ -66,6 +67,23 @@ class RegistreController extends AbstractController
                 // instead of its contents
                 $user->setBorchureFilename($newFilename);
             }
+            $file = $form->get('imageUrl')->getData();
+
+            if ($file) {
+                // Generate a unique name for the file
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+    
+                // Move the file to the desired directory
+                $file->move(
+                    $this->getParameter('image_directory'), // Path to the directory where images will be saved
+                    $fileName
+                );
+    
+                // Update the user's profile picture property with the file name
+                $user->setImageUrl($fileName); // Assuming you have a setProfilePicture method in your User entity
+    
+            }
+            
            
             $password_hashed=$this->userPasswordEncoderInterface->encodePassword($user,$user->getPassword());
             $user->setPassword($password_hashed);
@@ -73,7 +91,11 @@ class RegistreController extends AbstractController
             $user->getRoles();
             $token = $tokenGenerator->generateToken();
             $user->setResetToken($token);
-            $user->setEtat(false);
+            if(in_array('ROLE_COACH',$user->getRoles(),true)){
+                $user->setEtat(false);
+            }else{
+                $user->setEtat(true);
+            }
             $user =$form->getData(); 
             $entityManager = $managerRegistry ->getManager();
             $entityManager->persist($user);
