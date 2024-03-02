@@ -1,0 +1,161 @@
+{% extends 'base.html.twig'  %}
+{% block breadcrumb %}
+ <!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb-bg.jpg') }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb-text">
+                    <h2>Annonces</h2>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+{% endblock  %}
+
+ 
+{% block body %}
+
+{{ form(form) }}
+
+<section class="class-details-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="class-details-text">
+                        
+                        {% for annonce in annonces %}
+
+                        <div class="cd-text">
+                            <div class="cd-single-item">
+                                
+                               <div class="blog-item">
+                        
+
+                        <div class="bi-pic">
+                         {% if annonce.brochureFilename is not null %}
+
+                        
+                        <img  src="{{ asset('uploads/brochures/' ~ annonce.brochureFilename) }}" >                       
+                         {% else %}
+
+                        <img src="img/blog/blog-1.jpg" alt="">                    
+                          {% endif %}
+                         </div>
+                         
+                        <div class="bi-text">
+                            <h5><a href="{{ path('showannonce', {'id': annonce.id}) }}">{{annonce.titre}}</a></h5>
+                            <ul>
+                                <li>by Admin</li>
+                                <li>{{annonce.date|date("d/m/Y H:i") }}</li>
+                                <li><a href="{{ path('showannonce', {'id': annonce.id}) }}" style=" color: rgb(243, 97, 0); ">Repondre</a></li>
+                            </ul>
+                            <p>{{annonce.description}}</p>
+                        </div>
+                    </div>
+                                                     
+                                <div class="latest-item">
+
+                                </div>
+                              
+                            </div>
+                            {% endfor %}
+                            
+                        </div>
+                                            
+
+
+                         
+                         <div class="blog-pagination">
+                        <div class="pagination-container">
+<nav aria-label="Page navigation example">
+									<ul class="pagination justify-content-center">
+										{% if CurrentPage > 1 %}
+											<li class="page-item">
+												<a hidden class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage - 1 }) }}">Précédent</a>
+												<a class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage - 1 }) }}" aria-label="Previous">
+													<span aria-hidden="true">&laquo;</span>
+													<span class="sr-only">Previous</span>
+												</a>
+											</li>
+										{% endif %}
+										{% for page in 1..pagesCount %}
+											{% if page == CurrentPage %}
+												<li class="page-item active">
+													<span class="page-link">{{ page }}</span>
+												</li>
+											{% else %}
+												<li class="page-item">
+													<a class="page-link" href="{{ path('showdbannonce', {'page': page}) }}">{{ page }}</a>
+												</li>
+											{% endif %}
+										{% endfor %}
+										{% if CurrentPage < pagesCount %}
+											<li class="page-item">
+												<a hidden class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage + 1 }) }}">Next</a>
+												<a class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage + 1 }) }}" aria-label="Next">
+													<span aria-hidden="true">&raquo;</span>
+													<span class="sr-only">Next</span>
+												</a>
+											</li>
+										{% endif %}
+									</ul>
+								</nav>
+					
+</div>
+                    </div>
+
+                         
+
+
+                       
+                    </div>
+                    
+                    
+                </div>
+                 
+                <div class="col-lg-4 col-md-8">
+                    <div class="sidebar-option">
+                        
+                       
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+   
+   
+
+       <!-- Class Details Section Begin -->
+    <section class="class-details-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="class-details-text">
+                        <div class="cd-pic">
+                            
+                        </div>
+                        
+
+                            
+                           
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Class Details Section End -->
+    <!-- styling for the comments -->
+
+
+
+   
+   {% endblock %}
+
+
