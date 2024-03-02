@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\JWTService;
+use App\Service\PdfService;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,6 +20,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RegistreController extends AbstractController
 {
@@ -29,7 +36,7 @@ class RegistreController extends AbstractController
         $this->userPasswordEncoderInterface=$userPasswordEncoderInterface;
     }
     #[Route('/registre', name: 'app_registre')]
-    public function RegisterUser(ManagerRegistry $managerRegistry, Request $request,SendMailService $mail, JWTService  $jwt ,TokenGeneratorInterface $tokenGenerator,SluggerInterface $slugger): Response
+    public function RegisterUser(ManagerRegistry $managerRegistry, Request $request,SendMailService $mail, JWTService  $jwt ,TokenGeneratorInterface $tokenGenerator,SluggerInterface $slugger,PdfService $pdfService): Response
     {
 
         if ($this->getUser()) {
@@ -39,6 +46,7 @@ class RegistreController extends AbstractController
         $user = new User;
 
         $form = $this->createForm(UserType::class, $user);
+        
         
         $form->handleRequest($request);
         if ($form->isSubmitted() and $form->isValid()) {
@@ -96,10 +104,57 @@ class RegistreController extends AbstractController
             }else{
                 $user->setEtat(true);
             }
+            $pdfHtml = $this->render('registre/index.html.twig', [
+                'form' => $form->createView()
+            ]);
+
+            
+
+            //$pdfService->showPdfFile($pdfHtml);
+           /* $registrationLink = $this->generateUrl('app_registre', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            // Générer le code QR avec le lien vers la route d'enregistrement
+            $qrCode = Builder::create()
+                ->writer(new PngWriter())
+                ->encoding(new Encoding('UTF-8'))
+                ->errorCorrectionLevel(ErrorCorrectionLevel::High)
+                ->size(300)
+                ->margin(10)
+                ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
+                ->data($registrationLink)
+                ->build();
+
+            // Enregistrer le code QR dans le dossier temporaire
+           $qrCodeFileName = 'qrcode_' . uniqid() . '.png';
+            $qrCodePath = $this->getParameter('kernel.project_dir') . '/public/temp/' . $qrCodeFileName;
+            $qrCode->saveToFile($qrCodePath);
+            return $this->render('registre/index.html.twig', [
+                'form' => $form->createView(),
+                'qrCode' => $qrCode
+            ])
+            ;*/
+
+
             $user =$form->getData(); 
             $entityManager = $managerRegistry ->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+            
+            $result = Builder::create()
+                ->writer(new PngWriter())
+                ->data($this->generateUrl('app_downloadQr', ['id' => $user->getId()], UrlGeneratorInterface::ABSOLUTE_URL))
+                ->encoding(new Encoding('UTF-8'))  // Optional, adjust encoding if needed
+                ->size(300)  // Optional, adjust size
+                ->margin(10)
+                ->build();
+
+            // Generate the file path
+            $fileName = $user->getId() . '-qr-code.png';
+            $filePath = $this->getParameter('kernel.project_dir') . '/public/temp/' . $fileName;
+            $result->saveToFile($filePath);
+         
+
+
 
             // On génere le JWT de l'utilisateur 
             // On crée le header
@@ -140,7 +195,9 @@ class RegistreController extends AbstractController
         
         return $this->render('registre/index.html.twig', [
             'form' => $form->createView(),
-        ]);
+            
+        ])
+        ;
         //return $this->render('registre/index.html.twig', [
        //     'controller_name' => 'RegistreController',
         //]);
@@ -233,5 +290,20 @@ class RegistreController extends AbstractController
             );
             return $this->redirectToRoute('app_login');
     }
+
+    #[Route('/downloadQr/{id}', name: 'app_downloadQr')]
+    public function downloadQr(PdfService $pdfService,int $id,UserRepository $userRepository)
+    {
+        $user = $userRepository->find($id);
+        $form = $this->createForm(UserType::class, $user);
+        $pdfHtml = $this->render('registre/index.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+        $pdfService->showPdfFile($pdfHtml);
+
+        
+    }
+
 
 }
