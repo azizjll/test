@@ -51,7 +51,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         throw new CustomUserMessageAuthenticationException('L\'utilisateur n\'est pas vérifié ou est bloqué.');
         }*/
         
-
+        if (!$user) {
+            throw new CustomUserMessageAuthenticationException('Email ou mot de passe incorrect.');
+        }
         if(!$user->getIsVerified() ){
             throw new CustomUserMessageAuthenticationException('L\'utilisateur n\'est pas vérifié .');
             // last username entered by the user

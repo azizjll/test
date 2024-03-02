@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+    <section class="choseus-section spad">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                     <div class="section-title">
+                            
+                        <h2>modifier votre profile</h2>
+                    </div>
+                   
+
+                    {# Afficher les éventuelles erreurs du formulaire #}
+    
+                    {{ form_start(modifImage) }}
+                        <div class="fs-widget">
+                                <h4>Image</h4>
+                                {{ form_row(modifImage.imageUrl, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
+                                <button class="btn btn-lg btn-primary  " type="submit" style="width:600px;background-color: #E36414; border-color: orange;padding-bottom: 10px;">
+                            valider
+                                 </button>    
+                         </div>
+
+                    {{ form_end(modifImage) }}
+
+
+                    {{ form_start(form) }}
+                       
+                        
+                       
+                        <div class="fs-widget">
+                            <h4>Nom</h4>
+                            {{ form_row(form.Username, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputUsername', 'autocomplete': 'username', 'autofocus': 'autofocus'}}) }}
+                            
+                        </div>
+                       
+
+
+                        <div class="fs-widget">
+                            <h4>Date de naissance</h4>
+                            {{ form_row(form.DateNaissance, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
+                        </div>
+                        
+                       
+                        <div class="fs-widget">
+                            <h4>Numéro de téléphone</h4>
+                            {{ form_row(form.Numero, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
+                        </div>
+
+                       
+                        
+
+                         <button class="btn btn-lg btn-primary  " type="submit" style="width:600px;background-color: #E36414; border-color: orange;padding-bottom: 10px;">
+                            valider
+                        </button>
+                         
+
+
+                    {{ form_end(form) }}
+
+                    <div>
+                    {{ form_start(passForm) }}
+                        <div class="fs-widget">
+                            <h4>S'il vous plait entrez votre mot de passe !</h4>
+                            {{ form_row(passForm.password.first, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputEmail', 'autocomplete': 'email', 'required': 'required','style':'width:600px;text-align:center;'}}) }}
+                            
+                        </div>
+                        {{ form_errors(passForm.password,{'attr':{'class':'text-danger'}}) }}
+                        {{ form_errors(passForm.password,{'attr':{'class':'text-danger'}}) }}
+                        <div class="fs-widget">
+                            <h4>Confirmation votre mot de passe</h4>
+                            {{ form_row(passForm.password.second, {'label': false, 'attr': {'class': 'form-control', 'id': 'inputEmail', 'autocomplete': 'email', 'required': 'required','style':'width:600px;text-align:center;'}}) }}
+                        </div>
+                        
+                    
+                        <br>
+                        <button class="btn btn-lg btn-primary " type="submit" style="width:600px;background-color: #E36414; border-color: orange;">
+                                        changer mot de passe
+                        </button>
+
+                        <a href="{{ path('app_task') }}" align="start"  ><b>Retour à la page d'accueil</b></a>
+                    {{ form_end(passForm) }}
+                    </div>
+
+
+
+                </div>
+            </div>
+
+                        
+                
+        </div>
+    </section>
+    <!-- ChoseUs Section End -->
+
+     
+    
+
+    
+
+    
+
+    
+
+    <!-- Get In Touch Section Begin -->
+    <div class="gettouch-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-map-marker"></i>
+                        <p>Arian<br/> NH 03461</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-mobile"></i>
+                        <ul>
+                            <li>+216 95124032</li>
+                            <li>+216 40237834</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text email">
+                        <i class="fa fa-envelope"></i>
+                        <p>Support.gymcenter@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+{% endblock %}
+

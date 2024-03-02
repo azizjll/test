@@ -79,54 +79,54 @@
 
                     {# Afficher les éventuelles erreurs du formulaire #}
     
-                    {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
+                    {{ form_start(user,{attr:{novalidate:'novalidate'}}) }}
                        
                         
                        
                         <div class="fs-widget">
                             <h4>Nom et prenom</h4>
-                            {{ form_row(form.Username, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputUsername', 'autocomplete': 'username', 'autofocus': 'autofocus'}}) }}
+                            {{ form_row(user.Username, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputUsername', 'autocomplete': 'username', 'autofocus': 'autofocus'}}) }}
                             
                         </div>
 
                         <div class="fs-widget">
                             <h4>Email</h4>
-                            {{ form_row(form.email, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputEmail', 'autocomplete': 'email', 'required': 'required'}}) }}
+                            {{ form_row(user.email, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputEmail', 'autocomplete': 'email', 'required': 'required'}}) }}
                             
                         </div>
 
                         <div class="fs-widget">
                             <h4>Mot de passe</h4>
-                            {{ form_row(form.password.first, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputPassword', 'autocomplete': 'new-password', 'required': 'required'}}) }}
+                            {{ form_row(user.password.first, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputPassword', 'autocomplete': 'new-password', 'required': 'required'}}) }}
                             
                         </div>
 
                         <div class="fs-widget">
                             <h4>Confirmation</h4>
-                            {{ form_row(form.password.second, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputConfirmation', 'autocomplete': 'new-password', 'required': 'required'}}) }}
+                            {{ form_row(user.password.second, {'label': false, 'attr': {'class': 'form-control','style':'width:600px;text-align:center;', 'id': 'inputConfirmation', 'autocomplete': 'new-password', 'required': 'required'}}) }}
                         </div>
                         <div class="fs-widget">
                             <h4>Date de naissance</h4>
-                            {{ form_row(form.DateNaissance, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
+                            {{ form_row(user.DateNaissance, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
                         </div>
                         <div class="fs-widget">
                             <h4>Rôles</h4>
-                            {{ form_row(form.roles, {'label': false}) }}
+                            {{ form_row(user.roles, {'label': false}) }}
                         </div>
                        
                         <div class="fs-widget">
                             <h4>Numéro de téléphone</h4>
-                            {{ form_row(form.Numero, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
+                            {{ form_row(user.Numero, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
                         </div>
                        
                         <div class="fs-widget">
                             <h4>documents: Obligatoire pour les coachs téléchargeaient votre diplôme </h4>
-                            {{ form_row(form.brochure, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}})  }}
+                            {{ form_row(user.brochure, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}})  }}
                         </div>
 
                          <div class="fs-widget">
                             <h4>Image</h4>
-                            {{ form_row(form.imageUrl, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
+                            {{ form_row(user.imageUrl, {'label': false,'attr': {'class': 'form-control','style':'width:600px;text-align:center;'}}) }}
                         </div>
 
                          <button class="btn btn-lg btn-primary  " type="submit" style="width:600px;background-color: #E36414; border-color: orange;padding-bottom: 10px;">
@@ -135,10 +135,10 @@
                          <a href="{{ path('app_task') }}" align="start"  ><b>Retour à la page d'accueil</b></a>
 
 
-                    {{ form_end(form) }}
+                    {{ form_end(user) }}
 
 
-                   
+
                 </div>
             </div>
 

@@ -93,7 +93,7 @@
                             </div>
                 {% endfor %}
             
-                <form method="post">
+                <form  method="post">
 
                     {% if error %}
                             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -113,20 +113,20 @@
                         
                        
 
-                        <div class="fs-widget">
+                        <div class="fs-widget"style="padding-top: 25px;">
                             <h4>Please sign in</h4>
                         </div>
-                        <div class="fs-widget"> <!-- Ajout de la classe fs-widget -->
-                            <h4>Email</h4> <!-- Ajout du titre h4 -->
-                            <label for="inputEmail"> <!-- Le label reste inchangé -->
-                                <input type="email" value="{{ last_username }}"  name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                        <div class="fs-widget"> 
+                            <h4>Email</h4> 
+                            <label for="inputEmail">
+                                <input type="email" value="{{ last_username }}"  name="email" id="inputEmail" class="form-control" style="width:600px" autocomplete="email" required autofocus>
                             </label>
                         </div>
                         
-                        <div class="fs-widget"> <!-- Ajout de la classe fs-widget pour Password -->
-                            <h4>Password</h4> <!-- Ajout du titre h4 -->
-                            <label for="inputPassword"> <!-- Le label reste inchangé -->
-                                <input type="password" name="password" id="inputPassword " class="form-control" autocomplete="current-password" required>
+                        <div class="fs-widget"> 
+                            <h4>Password</h4> 
+                            <label for="inputPassword"> 
+                                <input type="password" name="password" id="inputPassword " class="form-control" style="width:600px" autocomplete="current-password" required>
                             </label>
                         </div>
 
@@ -134,8 +134,8 @@
                             value="{{ csrf_token('authenticate') }}"
                         >
 
-                        <button class="btn btn-lg btn-primary" type="submit">
-                            Sign in
+                        <button class="btn btn-lg btn-primary " type="submit" style="width:600px;background-color: #E36414; border-color: orange;">
+                            Se connecter
                         </button>
 
                         <div class="fs-widget p-3">

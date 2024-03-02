@@ -33,13 +33,17 @@ class User implements UserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message:"Email est nécessaire")]
-    #[Assert\Email(message:"The email '{{ value }}' is not a valid email ")]
+    #[Assert\Email]
     #[Assert\Length([
         'min' => 5,
         'max' => 40,
         'minMessage' => "Votre email doit être au moins {{ limit }} characters long",
         'maxMessage' => "Votre email ne peut pas dépasser {{ limit }} characters"
     ])]
+    #[Assert\Regex(
+             pattern:"/^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$/",
+             message:"L'email '{{ value }}' n'est pas valide."
+    )]
     private ?string $email = null;
 
     
@@ -61,8 +65,8 @@ class User implements UserInterface
     #[ORM\Column]
     #[Assert\NotBlank(message:'le mot de passe est nécessaire')]
     #[Assert\Length([
-        'min' => 5,
-        'max' => 10,
+        'min' => 8,
+        'max' => 100,
         'minMessage' => "Votre mot de passe doit être au moins {{ limit }} characters long",
         'maxMessage' => "Votre mot de passe ne peut pas dépasser {{ limit }} characters"
     ])]
@@ -76,7 +80,13 @@ class User implements UserInterface
     private ?\DateTimeInterface $DateNaissance = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:'le neumero  est nécessaire')]    
+    #[Assert\NotBlank(message:'le neumero  est nécessaire')] 
+    #[Assert\Regex(
+        pattern:"/^[2|5|9|4]\d{7}$/",
+            message:"Le numéro de téléphone doit commencer par 2, 5, 9 ou 4 et contenir exactement 8 chiffres"
+    )] 
+
+
     private ?string $Numero = null;
 
     #[ORM\Column(nullable: true)]
@@ -84,6 +94,9 @@ class User implements UserInterface
 
     #[ORM\Column(nullable: true)]
     private ?bool $etat = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $ImageUrl = null;
 
     #[ORM\Column(length: 255,nullable: true)]
     private ?string $borchureFilename = null;
@@ -170,6 +183,18 @@ class User implements UserInterface
 
         return $this;
     }
+    /**
+     * @Assert\Callback
+     */
+    public function validatePassword(ExecutionContextInterface $context): void
+    {
+        // Vérifie si le mot de passe respecte les critères
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $this->password)) {
+            $context->buildViolation('Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre')
+                ->atPath('password')
+                ->addViolation();
+        }
+    }
 
     public function getIsVerified(): ?bool
     {
@@ -193,6 +218,29 @@ class User implements UserInterface
         $this->DateNaissance = $DateNaissance;
 
         return $this;
+    }
+    /**
+     * @Assert\Callback
+     */
+    public function validateDateNaissance(ExecutionContextInterface $context)
+    {
+        // Récupérer la date actuelle
+        $dateActuelle = new \DateTime();
+
+        // Vérifier si la date de naissance est supérieure à la date actuelle
+        if ($this->DateNaissance > $dateActuelle) {
+            $context->buildViolation("La date de naissance ne peut pas être dans le futur.")
+                ->atPath('DateNaissance')
+                ->addViolation();
+        }
+
+        // Vérifier si la date de naissance est antérieure à 1980
+        $date1960 = new \DateTime('1960-01-01');
+        if ($this->DateNaissance < $date1960) {
+            $context->buildViolation("La date de naissance doit être postérieure à 1960.")
+                ->atPath('DateNaissance')
+                ->addViolation();
+        }
     }
 
     public function getNumero(): ?string
@@ -268,6 +316,17 @@ class User implements UserInterface
     public function setBorchureFilename(string $borchureFilename): static
     {
         $this->borchureFilename = $borchureFilename;
+
+        return $this;
+    }
+    public function getImageUrl(): ?string
+    {
+        return $this->ImageUrl;
+    }
+
+    public function setImageUrl(string $ImageUrl): static
+    {
+        $this->ImageUrl = $ImageUrl;
 
         return $this;
     }

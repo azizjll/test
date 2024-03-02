@@ -20,9 +20,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use App\Service\JWTService;
 use App\Form\UserType;
-
-
-
+use Doctrine\Migrations\Tools\Console\ConsoleLogger;
+use SebastianBergmann\Environment\Console;
 
 class UserController extends AbstractController
 {
@@ -85,6 +84,26 @@ class UserController extends AbstractController
         ]);
     }
 
+
+    #[Route('/listClients/ajax', name: 'app_list_Clients_ajax')]
+    public function ajaxlistClients(Request $request): Response
+    {
+        $Username=$request->get('searchValue');
+        $clients=$this->userRepository->findByUsername($Username,'ROLE_CLIENT');
+        return $this->render('ajaxlisteclient.html.twig', [
+            'clients' => $clients,
+        ]);
+    }
+    #[Route('/listCoach/ajax', name: 'app_list_Coach_ajax')]
+    public function ajaxlistCoach(Request $request): Response
+    {
+        $Username=$request->get('searchValue');
+        $clients=$this->userRepository->findByUsername($Username,'ROLE_COACH');
+        return $this->render('ajaxlistcoach.html.twig', [
+            'clients' => $clients,
+        ]);
+    }
+
     #[Route('/addClient', name: 'app_add_client')]
     public function addClient(Request $request,SendMailService $mail,ManagerRegistry $managerRegistry)
     {
@@ -139,11 +158,72 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_list_Clients');
 
     }
+    
 
     return $this->render('addClient.html.twig', [
         'Client' => $form->createView(),
     ]);
     }
+
+    #[Route('/addCaoch', name: 'app_add_coach')]
+    public function addCaoch(Request $request,SendMailService $mail,ManagerRegistry $managerRegistry)
+    {
+        $user = new User();
+
+    $form = $this->createForm(UserType::class, $user);
+    $form->handleRequest($request);
+
+    if($form->isSubmitted() && $form->isValid()){
+        $token = $this->tokenGenerator->generateToken();
+        $user->setResetToken($token);
+        $password_hashed = $this->passwordEncoder->encodePassword($user,$user->getPassword());
+        $user->setPassword($password_hashed);
+        $user->setEtat(true);
+        $user->setRoles(['ROLE_COACH']);
+        $user = $form->getData();
+
+        $entityManager = $managerRegistry ->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+        
+        // On génere le JWT de l'utilisateur 
+            // On crée le header
+            $header = [
+                'typ'=> 'JWT',
+                'alg' => 'HS256'
+            ];
+
+            // On crée le payload
+            $payload = [
+                'user_id' => $user->getId()
+            ];
+
+            // On génère le token 
+            $token = $this->jwt->generate($header, $payload , $this->getParameter('app.jwtsecret'));
+             
+
+            // On envoie un mail
+            $mail->send(
+                'no-reply@monsite.com',
+                $user->getEmail(),
+                'Activation de votre compte',
+                'register',
+                compact('user','token')
+            );
+            
+            $this->addFlash(
+                'Success',
+                'Client added successfully! !'
+            );
+
+        return $this->redirectToRoute('app_list_Coach');
+
+    }
+    return $this->render('addCoach.html.twig', [
+        'Client' => $form->createView(),
+    ]);
+    }
+
 
     #[Route('/bloqueClient/{id}', name: 'app_block_client')]
     public function bloqueClients($id,ManagerRegistry $managerRegistry): Response

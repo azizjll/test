@@ -33,8 +33,12 @@ class JWTService
         $base64Header = base64_encode(json_encode($header));
         $base64Payload = base64_encode(json_encode($payload));
 
+        // On "nettoie" les valeurs encodées (retrait des +, / et =)
+
         $base64Header = str_replace(['+' , '/' , '='], ['-','_',''],$base64Header);
         $base64Payload = str_replace(['+' , '/' , '='], ['-','_',''],$base64Payload );
+
+        //on génère la signature
 
         $secret = base64_encode($secret);
         
