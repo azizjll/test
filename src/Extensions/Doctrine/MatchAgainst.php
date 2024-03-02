@@ -17,7 +17,7 @@ class MatchAgainst extends FunctionNode
     /** @var bool */
     protected $queryExpansion = false;
 
-    public function parse(Parser $parser)
+    public function parse(Parser $parser) : void
     {
         // match
         $parser->match(Lexer::T_IDENTIFIER);
@@ -50,15 +50,17 @@ class MatchAgainst extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
-    public function getSql(SqlWalker $walker)
-    {
-        $fields = [];
-        foreach ($this->pathExp as $pathExp) {
-            $fields[] = $pathExp->dispatch($walker);
-        }
-        $against = $walker->walkStringPrimary($this->against)
-            . ($this->booleanMode ? ' IN BOOLEAN MODE' : '')
-            . ($this->queryExpansion ? ' WITH QUERY EXPANSION' : '');
-        return sprintf('MATCH (%s) AGAINST (%s)', implode(', ', $fields), $against);
+    public function getSql(SqlWalker $sqlWalker): string
+{
+    $fields = [];
+    foreach ($this->pathExp as $pathExp) {
+        $fields[] = $pathExp->dispatch($sqlWalker);
     }
+
+    $against = $sqlWalker->walkStringPrimary($this->against)
+        . ($this->booleanMode ? ' IN BOOLEAN MODE' : '')
+        . ($this->queryExpansion ? ' WITH QUERY EXPANSION' : '');
+
+    return sprintf('MATCH (%s) AGAINST (%s)', implode(', ', $fields), $against);
+}
 }

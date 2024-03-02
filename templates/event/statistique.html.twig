@@ -1,0 +1,42 @@
+
+
+
+{% block title %}Courbe des événements{% endblock %}
+
+
+{% block body %}
+
+<h1>c'est du statistique</h1>
+     <h1>Courbe des événements</h1>
+
+    <canvas id="courbeEvenements" width="400" height="200"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('courbeEvenements').getContext('2d');
+        var mois = {{ evenementsParMois|keys|json_encode|raw }};
+        var counts = {{ evenementsParMois|map(e => e)|json_encode|raw }};
+
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: mois,
+                datasets: [{
+                    label: 'Nombre d\'événements',
+                    data: counts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}
+

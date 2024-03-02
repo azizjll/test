@@ -1,3 +1,15 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+app_controllers:
+    resource: '../src/Controller/'
+    type: annotation
+# config/routes.yaml
+courbe_evenements:
+    path: /courbe-evenements
+    controller: App\Controller\EventController::courbeEvenements
+# config/routes.yaml
+calendar:
+    path: /calendar
+    controller: App\Controller\EventController::viewCalendar
+    methods: ['GET']
