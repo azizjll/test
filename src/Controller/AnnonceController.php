@@ -151,6 +151,7 @@ public function showdbannonce(AnnonceRepository $annonceRepository, Request $req
     //partie reponse
     //creation d'une reponse
     $commentaire = new Commentaire();
+    $commentaire->setUser($this->getUser());
     //generer le formlaire
     $commentform = $this->createForm(CommentaireType::class, $commentaire);
     $commentform->handleRequest($request);
@@ -195,12 +196,13 @@ public function showdbannonce(AnnonceRepository $annonceRepository, Request $req
     {
         $em = $managerRegistry->getManager();
         $annonce = new Annonce();
+        $annonce->setUser($this->getUser());
         $form = $this->createForm(AnnonceType::class, $annonce);
         $form->handleRequest($req);
         if ($form->isSubmitted() and $form->isValid()) {
             /** @var UploadedFile $brochureFile */
             $brochureFile = $form->get('brochure')->getData();
-
+            
             // this condition is needed because the 'brochure' field is not required
             // so the PDF file must be processed only when a file is uploaded
             if ($brochureFile) {

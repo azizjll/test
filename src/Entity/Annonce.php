@@ -51,6 +51,9 @@ class Annonce
     #[ORM\Column(length:255,nullable:true)]
     private ?string $brochureFilename = null;
 
+    #[ORM\ManyToOne(inversedBy: 'annonces')]
+    private ?User $User = null;
+
     public function getBrochureFilename(): ?string
     {
         return $this->brochureFilename;
@@ -186,6 +189,18 @@ public function removeCommentaire(Commentaire $commentaire): static
             $commentaire->setAnnonce(null);
         }
     }
+
+    return $this;
+}
+
+public function getUser(): ?User
+{
+    return $this->User;
+}
+
+public function setUser(?User $User): static
+{
+    $this->User = $User;
 
     return $this;
 }

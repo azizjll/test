@@ -29,6 +29,9 @@ class Commentaire
     #[ORM\JoinColumn(nullable: false)]
     private ?Annonce $annonce = null;
 
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    private ?User $User = null;
+
     public function getRef(): ?int
     {
         return $this->ref;
@@ -68,6 +71,18 @@ class Commentaire
     public function setAnnonce(?Annonce $annonce): static
     {
         $this->annonce = $annonce;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
 
         return $this;
     }
