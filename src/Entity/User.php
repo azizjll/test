@@ -3,332 +3,114 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface
+class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"Nom d'utilisateur est nécessaire")]
-    #[Assert\Length([
-        'min' => 5,
-        'max' => 20,
-        'minMessage' => "Votre nom doit être au moins {{ limit }} characters long",
-        'maxMessage' => "Votre nom ne peut pas dépasser {{ limit }} characters"
-    ])]
-    private ?string $Username = null;
+    private ?string $nom = null;
 
+    #[ORM\OneToMany(targetEntity: Participation::class, mappedBy: 'user')]
+    private Collection $participation;
 
-    #[ORM\Column(length: 180, unique: true)]
-    #[Assert\NotBlank(message:"Email est nécessaire")]
-    #[Assert\Email]
-    #[Assert\Length([
-        'min' => 5,
-        'max' => 40,
-        'minMessage' => "Votre email doit être au moins {{ limit }} characters long",
-        'maxMessage' => "Votre email ne peut pas dépasser {{ limit }} characters"
-    ])]
-    #[Assert\Regex(
-             pattern:"/^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$/",
-             message:"L'email '{{ value }}' n'est pas valide."
-    )]
-    private ?string $email = null;
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'user')]
+    private Collection $events;
 
-    
-    
-    
+    public function __construct()
+    {
+        $this->participation = new ArrayCollection();
+        $this->events = new ArrayCollection();
+    }
 
-    
-
-    #[ORM\Column]
-    #[Assert\NotBlank(message:"le role  est nécessaire")]
-    private array $roles = [];
-
-    #[ORM\Column(length: 100)]
-    private ?string $resetToken = null;
-
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    #[Assert\NotBlank(message:'le mot de passe est nécessaire')]
-    #[Assert\Length([
-        'min' => 8,
-        'max' => 100,
-        'minMessage' => "Votre mot de passe doit être au moins {{ limit }} characters long",
-        'maxMessage' => "Votre mot de passe ne peut pas dépasser {{ limit }} characters"
-    ])]
-    private ?string $password = null;
-
-    #[ORM\Column]
-    private ?bool $is_verified = false;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\NotBlank(message:'le le date  est nécessaire')]  
-    private ?\DateTimeInterface $DateNaissance = null;
-
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:'le neumero  est nécessaire')] 
-    #[Assert\Regex(
-        pattern:"/^[2|5|9|4]\d{7}$/",
-            message:"Le numéro de téléphone doit commencer par 2, 5, 9 ou 4 et contenir exactement 8 chiffres"
-    )] 
-
-
-    private ?string $Numero = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $Cin = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?bool $etat = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $ImageUrl = null;
-
-    #[ORM\Column(length: 255,nullable: true)]
-    private ?string $borchureFilename = null;
-    
+   
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getNom(): ?string
     {
-        return $this->email;
+        return $this->nom;
     }
 
-    public function setEmail(string $email): static
+    public function setNom(string $nom): static
     {
-        $this->email = $email;
+        $this->nom = $nom;
 
         return $this;
     }
 
     /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
+     * @return Collection<int, Participation>
      */
-    public function getUserIdentifier(): string
+    public function getParticipation(): Collection
     {
-        return (string) $this->Username;
+        return $this->participation;
     }
 
-    public function getResetToken(): ?string
+    public function addParticipation(Participation $participation): static
     {
-        return $this->resetToken;
-    }
-
-
-    public function setResetToken(string $resetToken): self
-    {
-        $this->resetToken = $resetToken;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->Username;
-    }
-
-    /**
-     * @see UserInterface
-     */
-        public function getRoles(): array
-        {
-            $roles = $this->roles;
-            // guarantee every user at least has ROLE_USER
-            $roles[] = 'ROLE_USER';
-
-            return array_unique($roles);
+        if (!$this->participation->contains($participation)) {
+            $this->participation->add($participation);
+            $participation->setUser($this);
         }
 
-        public function setRoles(array $roles): static
-        {
-            $this->roles =  array_values(array_unique($roles));
+        return $this;
+    }
 
-            return $this;
+    public function removeParticipation(Participation $participation): static
+    {
+        if ($this->participation->removeElement($participation)) {
+            // set the owning side to null (unless already changed)
+            if ($participation->getUser() === $this) {
+                $participation->setUser(null);
+            }
         }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-    /**
-     * @Assert\Callback
-     */
-    public function validatePassword(ExecutionContextInterface $context): void
-    {
-        // Vérifie si le mot de passe respecte les critères
-        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $this->password)) {
-            $context->buildViolation('Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre')
-                ->atPath('password')
-                ->addViolation();
-        }
-    }
-
-    public function getIsVerified(): ?bool
-    {
-        return $this->is_verified;
-    }
-
-    public function setIsVerified(bool $is_verified): self
-    {
-        $this->is_verified = $is_verified;
-
         return $this;
     }
 
-    public function getDateNaissance(): ?\DateTimeInterface
-    {
-        return $this->DateNaissance;
-    }
+    public function __toString(): string
+{
+    return $this->nom ?? ''; 
+}
 
-    public function setDateNaissance(?\DateTimeInterface $DateNaissance): static
-    {
-        $this->DateNaissance = $DateNaissance;
-
-        return $this;
-    }
     /**
-     * @Assert\Callback
+     * @return Collection<int, Event>
      */
-    public function validateDateNaissance(ExecutionContextInterface $context)
+    public function getEvents(): Collection
     {
-        // Récupérer la date actuelle
-        $dateActuelle = new \DateTime();
+        return $this->events;
+    }
 
-        // Vérifier si la date de naissance est supérieure à la date actuelle
-        if ($this->DateNaissance > $dateActuelle) {
-            $context->buildViolation("La date de naissance ne peut pas être dans le futur.")
-                ->atPath('DateNaissance')
-                ->addViolation();
+    public function addEvent(Event $event): static
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setUser($this);
         }
 
-        // Vérifier si la date de naissance est antérieure à 1980
-        $date1960 = new \DateTime('1960-01-01');
-        if ($this->DateNaissance < $date1960) {
-            $context->buildViolation("La date de naissance doit être postérieure à 1960.")
-                ->atPath('DateNaissance')
-                ->addViolation();
+        return $this;
+    }
+
+    public function removeEvent(Event $event): static
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getUser() === $this) {
+                $event->setUser(null);
+            }
         }
-    }
-
-    public function getNumero(): ?string
-    {
-        return $this->Numero;
-    }
-
-    public function setNumero(?string $Numero): static
-    {
-        $this->Numero = $Numero;
 
         return $this;
     }
-
-    public function getCin(): ?int
-    {
-        return $this->Cin;
-    }
-
-    public function setCin(?int $Cin): static
-    {
-        $this->Cin = $Cin;
-
-        return $this;
-    }
-
-    public function getEtat(): ?bool
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(?bool $etat): self
-    {
-        $this->etat = $etat;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Returning a salt is only needed, if you are not using a modern
-     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
-     *
-     * @see UserInterface
-     */
-    public function getSalt(): ?string
-    {
-        return null;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials(){
-        return null;
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
-
-    public function setUsername(?string $Username): static
-    {
-        $this->Username = $Username;
-
-        return $this;
-    }
-
-    public function getBorchureFilename(): ?string
-    {
-        return $this->borchureFilename;
-    }
-
-    public function setBorchureFilename(string $borchureFilename): static
-    {
-        $this->borchureFilename = $borchureFilename;
-
-        return $this;
-    }
-    public function getImageUrl(): ?string
-    {
-        return $this->ImageUrl;
-    }
-
-    public function setImageUrl(string $ImageUrl): static
-    {
-        $this->ImageUrl = $ImageUrl;
-
-        return $this;
-    }
-    
 }
