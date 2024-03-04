@@ -27,14 +27,21 @@ class AnnonceRepository extends ServiceEntityRepository
 
     //search
 
-    public function search($mots){
-        $query = $this->createQueryBuilder('a');
-        if($mots != null){
-            $query->where('MATCH_AGAINST(a.titre, a.description) AGAINST (:mots boolean)>0')->setParameter('mots', $mots);
-                
-        }
-        return $query->getQuery()->getResult();
+    public function search($mots)
+{
+    $queryBuilder = $this->createQueryBuilder('a');
+
+    if ($mots !== null) {
+        $queryBuilder->where(
+            $queryBuilder->expr()->orX(
+                $queryBuilder->expr()->like('a.titre', ':mots'),
+                $queryBuilder->expr()->like('a.description', ':mots')
+            )
+        )->setParameter('mots', '%'.$mots.'%');
     }
+
+    return $queryBuilder->getQuery()->getResult();
+}
     
 
 

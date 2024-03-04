@@ -17,12 +17,13 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Annonce;
 use App\Entity\Commentaire;
 
+
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\AnnonceType;
 use App\Form\CommentaireType;
 use App\Form\SearchAnnonceType;
 use DateTime;
-
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 //pagination
 
 
@@ -184,6 +185,7 @@ public function showdbannonce(AnnonceRepository $annonceRepository, Request $req
     #[Route('/deletannonce/{id}', name: 'deletannonce')]
     public function deletannonce($id, ManagerRegistry $managerRegistry, AnnonceRepository $repo): Response
     {
+        
         $em = $managerRegistry->getManager();
         $id = $repo->find($id);
         $em->remove($id);
@@ -238,6 +240,7 @@ public function showdbannonce(AnnonceRepository $annonceRepository, Request $req
             'f' => $form
         ]);
     }
+
 
     
     #[Route('/editannonce/{id}', name: 'editannonce')]

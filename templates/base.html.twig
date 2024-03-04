@@ -1,45 +1,57 @@
 <!DOCTYPE html>
-<html lang="fr">
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="description" content="Gym Template">
+        <meta name="keywords" content="Gym, unica, creative, html">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>MonsterGYM</title>
+       
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
-           <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap" rel="stylesheet">
+            <link rel="icon" href="migrations/logo.png" type="image/x-icon">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+            <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/barfiller.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/magnific-popup.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+            <!-- Owl Carousel CSS -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+            <!-- Google Font -->
+            <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap" rel="stylesheet">
 
-    <!-- Css Styles -->
-    
-
-    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/flaticon.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/barfiller.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
-    
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
-             <!-- Js Plugins -->
-    <script src="{{asset('js/jquery-3.3.1.min.js')}}"></script>
-    <script src="{{asset('js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('js/jquery.magnific-popup.min.js')}}"></script>
-    <script src="{{asset('js/masonry.pkgd.min.js')}}"></script>
-    <script src="{{asset('js/jquery.barfiller.js')}}"></script>
-    <script src="{{asset('js/jquery.slicknav.js')}}"></script>
-    <script src="{{asset('js/owl.carousel.min.js')}}"></script>
-    <script src="{{asset('js/main.js')}}"></script>
+            <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
+            <script src="{{ asset('js/masonry.pkgd.min.js') }}"></script>
+            <script src="{{ asset('js/jquery.barfiller.js') }}"></script>
+            <script src="{{ asset('js/jquery.slicknav.js') }}"></script>
+            <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
+            <script src="{{ asset('js/main.js') }}"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-    
+               
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        
     </head>
     <body>
-        {% block body %}{% endblock %}
+    {% block body %}
+    
+    
+   
+    
+    {% endblock %}
     </body>
 </html>

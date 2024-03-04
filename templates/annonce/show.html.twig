@@ -39,13 +39,14 @@
 
             <div class="comment">
                 <div class="comment-info">
-                    <span class="comment-author">User123</span>
+                    <span class="comment-author">{{commentaire.user.username}}</span>
                     <span class="comment-timestamp"> {{commentaire.date|date("d/m/Y H:i") }}</span>
                 </div>
                 <p class="comment-text">{{ (commentaire.message)  }}</p>
+                 {% if app.user.id == commentaire.user.id %}
                  <a href="{{path('editcomment',{'ref':commentaire.ref})}}" style="margin-left: 10px;color: grey; font-weight: bold;"> Modifier</a>
                  <a href="{{path('deletecommentaire',{'ref':commentaire.ref})}}" style="margin-left: 15px;color: grey; font-weight: bold;"> Supprimer</a>
-
+                {% endif %}
             </div>
 
            
