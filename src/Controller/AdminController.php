@@ -28,6 +28,10 @@ class AdminController extends AbstractController
         ]);
     }
 
+ //add post
+ 
+
+
 //getting the posts and their comments
     #[Route('/adminannonces', name: 'adminannonces')]
     public function adminannonces(AnnonceRepository $annonceRepository): Response

@@ -58,14 +58,21 @@
                    
                     <div class="leave-comment">
     {{ form_start(f,{attr:{novalidate:'novalidate'}}) }}
-    <div class="form-group">
+    <div class="form-group" style="color: red;">
        
         {{ form_widget(f.titre, {'attr': {'placeholder': 'Titre', 'class': 'form-control'}}) }}
         {{ form_errors(f.titre) }}
     </div>
-    <div class="form-group">
+    <div class="form-group" style="color: red;">
     {{ form_widget(f.description, {'attr': {'placeholder': 'Description...', 'class': 'form-control', 'rows': '4'}}) }}
    {{ form_errors(f.description) }}
+  
+
+    </div>
+
+  <div class="form-group">
+    {{ form_widget(f.brochure, {'attr': {'placeholder': 'Description...', 'class': 'form-control', 'rows': '4'}}) }}
+   {{ form_errors(f.brochure) }}
   
 
     </div>

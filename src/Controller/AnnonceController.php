@@ -23,7 +23,8 @@ use App\Form\CommentaireType;
 use App\Form\SearchAnnonceType;
 use DateTime;
 
-//pagination
+//flasy
+use MercurySeries\FlashyBundle\FlashyNotifier;
 
 
 //upload images
@@ -95,7 +96,7 @@ public function showdbannonce(AnnonceRepository $annonceRepository, Request $req
         //$users = $joueurRepository->findAllUsers();
         $annonces = new Paginator($query);
         $currentPage = $request->query->getInt('page', 1);
-        $itemsPerPage = 2;
+        $itemsPerPage = 3;
         $annonces
             ->getQuery()
             ->setFirstResult($itemsPerPage * ($currentPage - 1))
@@ -182,17 +183,19 @@ public function showdbannonce(AnnonceRepository $annonceRepository, Request $req
     
 
     #[Route('/deletannonce/{id}', name: 'deletannonce')]
-    public function deletannonce($id, ManagerRegistry $managerRegistry, AnnonceRepository $repo): Response
+    public function deletannonce($id, ManagerRegistry $managerRegistry, AnnonceRepository $repo,FlashyNotifier $flashy): Response
     {
         $em = $managerRegistry->getManager();
         $id = $repo->find($id);
         $em->remove($id);
         $em->flush();
+        $flashy->success('Annonce supprimée', 'http://your-awesome-link.com');
+
         return $this->redirectToRoute('showdbannonce');
     }
 
     #[Route('/addannonce', name: 'addannonce')]
-    public function addannonce(ManagerRegistry $managerRegistry, Request $req,SluggerInterface $slugger): Response
+    public function addannonce(ManagerRegistry $managerRegistry, Request $req,SluggerInterface $slugger,FlashyNotifier $flashy): Response
     {
         $em = $managerRegistry->getManager();
         $annonce = new Annonce();
@@ -231,6 +234,9 @@ public function showdbannonce(AnnonceRepository $annonceRepository, Request $req
 
             $em->persist($annonce);
             $em->flush();
+
+            $flashy->success('Annonce ajoutée avec succèes', 'http://your-awesome-link.com');
+
             
             return $this->redirect('showdbannonce');
         }
@@ -242,7 +248,7 @@ public function showdbannonce(AnnonceRepository $annonceRepository, Request $req
     
     #[Route('/editannonce/{id}', name: 'editannonce')]
     public function editannonce($id, AnnonceRepository
-    $annonceRepository, ManagerRegistry $managerRegistry, Request $req): Response
+    $annonceRepository, ManagerRegistry $managerRegistry, Request $req,SluggerInterface $slugger,FlashyNotifier $flashy): Response
     {
         
         $em = $managerRegistry->getManager();
@@ -251,8 +257,37 @@ public function showdbannonce(AnnonceRepository $annonceRepository, Request $req
         $form = $this->createForm(AnnonceType::class, $dataid);
         $form->handleRequest($req);
         if ($form->isSubmitted() and $form->isValid()) {
+                        /** @var UploadedFile $brochureFile */
+                        $brochureFile = $form->get('brochure')->getData();
+            
+                        // this condition is needed because the 'brochure' field is not required
+                        // so the PDF file must be processed only when a file is uploaded
+                        if ($brochureFile) {
+                            $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                            // this is needed to safely include the file name as part of the URL
+                            $safeFilename = $slugger->slug($originalFilename);
+                            $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+            
+                            // Move the file to the directory where brochures are stored
+                            try {
+                                $brochureFile->move(
+                                    $this->getParameter('brochures_directory'),
+                                    $newFilename
+                                );
+                            } catch (FileException $e) {
+                                // ... handle exception if something happens during file upload
+                            }
+            
+                            // updates the 'brochureFilename' property to store the PDF file name
+                            // instead of its contents
+                            $dataid->setBrochureFilename($newFilename);
+                        }
+            
+                        // ...
             $em->persist($dataid);
             $em->flush();
+            $flashy->success('Annonce modifiée avec succèes', 'http://your-awesome-link.com');
+
             return $this->redirectToRoute('showdbannonce');
         }
 

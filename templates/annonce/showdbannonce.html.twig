@@ -19,7 +19,9 @@
  
 {% block body %}
 
-{{ form(form) }}
+
+
+{##just in case 
 
 <section class="class-details-section spad">
         <div class="container">
@@ -150,8 +152,159 @@
             </div>
         </div>
     </section>
+     just in case##}
     <!-- Class Details Section End -->
-    <!-- styling for the comments -->
+    
+
+
+    <!-- Blog Section Begin -->
+    <section class="blog-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 p-0">
+                <div style="padding-bottom: 20px; " >{{ form(form) }}</div>
+
+
+{% for annonce in annonces %}
+                    <div class="blog-item">
+                        <div class="bi-pic">
+                        {% if annonce.brochureFilename is not null %}
+                           <img  src="{{ asset('uploads/brochures/' ~ annonce.brochureFilename) }}" >                       
+                         {% else %}
+                           <img src="img/blog/blog-1.jpg" alt="">                    
+                          {% endif %}
+                        </div>
+                        <div class="bi-text">
+                            <h5><a href="./blog-details.html">{{ annonce.titre }}</a></h5>
+                            <ul>
+                                <li>by Admin</li>
+                                <li>{{annonce.date|date("d/m/Y H:i") }}</li>
+                                <li><a href="{{ path('showannonce', {'id': annonce.id}) }}" style=" color: rgb(243, 97, 0); ">Repondre</a></li>
+                            </ul>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incididunt ut
+                                labore et dolore magna aliqua accumsan lacus facilisis.</p>
+                        </div>
+                    </div>
+{% endfor %}
+
+
+
+
+                    <ul class="pagination justify-content-center">
+										{% if CurrentPage > 1 %}
+											<li class="page-item">
+												<a hidden class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage - 1 }) }}">Précédent</a>
+												<a class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage - 1 }) }}" aria-label="Previous">
+													<span aria-hidden="true">&laquo;</span>
+													<span class="sr-only">Previous</span>
+												</a>
+											</li>
+										{% endif %}
+										{% for page in 1..pagesCount %}
+											{% if page == CurrentPage %}
+												<li class="page-item active">
+													<span class="page-link">{{ page }}</span>
+												</li>
+											{% else %}
+												<li class="page-item">
+													<a class="page-link" href="{{ path('showdbannonce', {'page': page}) }}">{{ page }}</a>
+												</li>
+											{% endif %}
+										{% endfor %}
+										{% if CurrentPage < pagesCount %}
+											<li class="page-item">
+												<a hidden class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage + 1 }) }}">Next</a>
+												<a class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage + 1 }) }}" aria-label="Next">
+													<span aria-hidden="true">&raquo;</span>
+													<span class="sr-only">Next</span>
+												</a>
+											</li>
+										{% endif %}
+					</ul>
+
+
+                </div>
+                <div class="col-lg-4 col-md-8 p-0">
+                    <div class="sidebar-option">
+
+                        <div class="so-latest">
+                                <h5 class="title">
+                             <a href="{{ path('addannonce') }}" style="color: rgb(243, 97, 0); text-decoration: none;">Ajouter une annonce</a>
+                             </h5>
+                            <h5 class="title">Mes annonces</h5>
+                                
+                               <div class="latest-large set-bg" data-setbg="img/letest-blog/latest-1.jpg">
+   
+                                <div class="ll-text">
+
+                                </div>
+                            </div>
+                            <span class="span-profile-name"><h5>{{app.user.username}}</h5></span>
+                            21§/.?
+{% for annonce in annonces %}
+                            <div class="latest-item">
+                                <div class="li-pic">
+                                    <img src="img/letest-blog/latest-2.jpg" alt="">
+                                </div>
+                                <div class="li-text">
+                                    <h6><a href="{{ path('showannonce', {'id': annonce.id}) }}" >{{ annonce.titre }}</a></h6>
+                                    <span class="li-time">{{annonce.date|date("d/m/Y H:i") }}</span>
+                                    <div>
+                                      <span class="li-time">
+                                     <a href="{{path('editannonce',{'id':annonce.id})}}" style="color: inherit; text-decoration: inherit;">• edit</a>
+                                     </span>
+
+                                    
+                                     <span class="li-time">
+                                     <a href="{{path('deletannonce',{'id':annonce.id})}}" style="color: inherit; text-decoration: inherit;">• delete</a>
+                                     </span>
+                                     </div>
+                                     
+                                </div>
+                            </div>
+{% endfor %}
+
+                        </div>
+ <!-- pagination for mes annonces -->
+                    <ul class="pagination justify-content-center">
+										{% if CurrentPage > 1 %}
+											<li class="page-item">
+												<a hidden class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage - 1 }) }}">Précédent</a>
+												<a class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage - 1 }) }}" aria-label="Previous">
+													<span aria-hidden="true">&laquo;</span>
+													<span class="sr-only">Previous</span>
+												</a>
+											</li>
+										{% endif %}
+										{% for page in 1..pagesCount %}
+											{% if page == CurrentPage %}
+												<li class="page-item active">
+													<span class="page-link">{{ page }}</span>
+												</li>
+											{% else %}
+												<li class="page-item">
+													<a class="page-link" href="{{ path('showdbannonce', {'page': page}) }}">{{ page }}</a>
+												</li>
+											{% endif %}
+										{% endfor %}
+										{% if CurrentPage < pagesCount %}
+											<li class="page-item">
+												<a hidden class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage + 1 }) }}">Next</a>
+												<a class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage + 1 }) }}" aria-label="Next">
+													<span aria-hidden="true">&raquo;</span>
+													<span class="sr-only">Next</span>
+												</a>
+											</li>
+										{% endif %}
+					</ul>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
 
 
 
