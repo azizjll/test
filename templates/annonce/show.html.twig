@@ -1,151 +1,155 @@
 {% extends 'base.html.twig'  %}
 
 {% block body %}
-{# Debugging #}
+    {# Debugging #}
 
 
-<a href="{{ path('showannonce', {'id': annonce.id}) }}" style="color: inherit; text-decoration: inherit;"></a>
+    <a href="{{ path('showannonce', {'id': annonce.id}) }}" style="color: inherit; text-decoration: inherit;"></a>
 
 
-   
 
 
-     <body>
+
+    <body>
     <div class="container">
-     <div class="post-container">
+        <div class="post-container">
             <h1 class="post-title">{{annonce.titre}}</h1>
             <p class="post-body">{{annonce.description}}</p>
+            {% if annonce.brochureFilename is not null %}
+                <img  src="{{ asset('uploads/brochures/' ~ annonce.brochureFilename) }}" >
+
+            {% endif %}
         </div>
 
 
-        
+
 
         {{ form_start(commentform,{attr:{novalidate:'novalidate'}}) }}
-{{ form_errors(commentform.message) }}
+        <div style=" color: red;">
+            {{ form_errors(commentform.message) }}</div>
 
         <div class="post-container">
             <h1 class="post-title">{{ form_widget(commentform.message, {'attr': {'placeholder': 'Ajoutez un commentaire..', 'class': 'form-control'}}) }}</h1>
 
-    {{ form_widget(commentform.envoyer, {'attr': {'class': 'button'}}) }}
+            {{ form_widget(commentform.envoyer, {'attr': {'class': 'button'}}) }}
 
- {{ form_end(commentform) }}
+            {{ form_end(commentform) }}
         </div>
-   
 
-    
+
+
 
         <div class="comment-section">
-        {% for commentaire in annonce.commentaires|reverse %}
+            {% for commentaire in annonce.commentaires|reverse %}
 
-            <div class="comment">
-                <div class="comment-info">
-                    <span class="comment-author">{{commentaire.user.username}}</span>
-                    <span class="comment-timestamp"> {{commentaire.date|date("d/m/Y H:i") }}</span>
+                <div class="comment">
+                    <div class="comment-info">
+                        <span class="comment-author">{{ commentaire.user.username }}</span>
+                        <span class="comment-timestamp"> {{commentaire.date|date("d/m/Y H:i") }}</span>
+                    </div>
+                    <p class="comment-text">{{ (commentaire.message)  }}</p>
+                    {% if app.user.id == commentaire.user.id %}
+                    <a href="{{path('editcomment',{'ref':commentaire.ref})}}" style="margin-left: 10px;color: grey; font-weight: bold;"> Modifier</a>
+                    <a href="{{path('deletecommentaire',{'ref':commentaire.ref})}}" style="margin-left: 15px;color: grey; font-weight: bold;"> Supprimer</a>
+                    {% endif %}
+
                 </div>
-                <p class="comment-text">{{ (commentaire.message)  }}</p>
-                 {% if app.user.id == commentaire.user.id %}
-                 <a href="{{path('editcomment',{'ref':commentaire.ref})}}" style="margin-left: 10px;color: grey; font-weight: bold;"> Modifier</a>
-                 <a href="{{path('deletecommentaire',{'ref':commentaire.ref})}}" style="margin-left: 15px;color: grey; font-weight: bold;"> Supprimer</a>
-                {% endif %}
-            </div>
 
-           
-       {% endfor %}
+
+            {% endfor %}
 
         </div>
-        
+
     </div>
-</body>
+    </body>
 
-<style>
-body {
-    background-color: #1a1a1b;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    margin: 0;
-}
+    <style>
+        body {
+            background-color: #1a1a1b;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
 
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-}
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-.post-container {
-    background-color: #232324;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-}
+        .post-container {
+            background-color: #232324;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
 
-.post-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 30px; 
-}
+        .post-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 30px;
+        }
 
-.post-body {
-    font-size: 14px;
-    line-height: 1.6;
-}
+        .post-body {
+            font-size: 14px;
+            line-height: 1.6;
+        }
 
-.comment-section {
-    background-color: #2c2c2d;
-    border-radius: 8px;
-    padding: 10px;
-}
+        .comment-section {
+            background-color: #2c2c2d;
+            border-radius: 8px;
+            padding: 10px;
+        }
 
-.comment {
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #3a3a3b;
-}
+        .comment {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #3a3a3b;
+        }
 
-.comment-info {
-    font-size: 12px;
-    color: #949495;
-}
+        .comment-info {
+            font-size: 12px;
+            color: #949495;
+        }
 
-.comment-author {
-    color: #5f9ea0;
-}
+        .comment-author {
+            color: #5f9ea0;
+        }
 
-.comment-timestamp {
-    margin-left: 5px;
-}
+        .comment-timestamp {
+            margin-left: 5px;
+        }
 
-.comment-text {
-    font-size: 14px;
-    line-height: 1.5;
-}
+        .comment-text {
+            font-size: 14px;
+            line-height: 1.5;
+        }
 
-a {
-    color: #5f9ea0;
-    text-decoration: none;
-}
+        a {
+            color: #5f9ea0;
+            text-decoration: none;
+        }
 
-.button {
-    margin-top: 15px; 
+        .button {
+            margin-top: 15px;
 
-    background-color: #cc3700;
-    color: #ffffff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+            background-color: #cc3700;
+            color: #ffffff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-.button:hover {
+        .button:hover {
 
-    background-color: grey;
-}
+            background-color: grey;
+        }
 
 
-</style>
-
-   
+    </style>
 
 
 
@@ -167,13 +171,15 @@ a {
 
 
 
-   
 
 
 
 
-                    </div>
 
-                            
-  
+
+
+    </div>
+
+
+
 {% endblock %}

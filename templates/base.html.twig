@@ -43,7 +43,10 @@
 
                
             {{ encore_entry_script_tags('app') }}
+
         {% endblock %}
+        <script src="{{asset('build/dist/index.global.js')}}"></script>
+        {% block calendar %}{% endblock %}
         
     </head>
     <body>

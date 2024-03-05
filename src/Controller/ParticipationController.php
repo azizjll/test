@@ -42,6 +42,7 @@ class ParticipationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $participation->setUser($this->getUser());
             $entityManager->persist($participation);
             $entityManager->flush();
 
@@ -64,6 +65,7 @@ class ParticipationController extends AbstractController
 
         $participation = new Participation();
         $participation->setEvent($event);
+        $participation->setUser($this->getUser());
 
         $form = $this->createForm(ParticipationType1::class, $participation);
         $form->handleRequest($request);

@@ -45,4 +45,32 @@ class EventRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findEventsByParticipationCount()
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.participations', 'p')
+            ->select('e.nom, COUNT(p.id) as participationCount')
+            ->groupBy('e.id')
+            ->orderBy('participationCount', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function searchByNameAndLocation($keyword = null, $location = null)
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        if ($keyword !== null) {
+            $qb->andWhere('e.nom LIKE :keyword')
+                ->setParameter('keyword', '%' . $keyword . '%');
+        }
+
+        if ($location !== null) {
+            $qb->andWhere('e.lieu LIKE :location')
+                ->setParameter('location', '%' . $location . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

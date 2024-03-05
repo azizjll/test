@@ -23,7 +23,6 @@ class EventType extends AbstractType
             ])
             ->add('lieu')
             ->add('date')
-            ->add('user')
 
         ;
     }

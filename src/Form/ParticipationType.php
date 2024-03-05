@@ -17,7 +17,6 @@ class ParticipationType extends AbstractType
             ->add('email')
             ->add('tel')
             ->add('date')
-            ->add('user')
             ->add('event')
         ;
     }

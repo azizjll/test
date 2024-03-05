@@ -18,8 +18,10 @@
                         <p class="card-text"><strong>Date:</strong> {{ event.date ? event.date|date('Y-m-d H:i:s') : '' }}</p>
                         <div class="btn-group" role="group">
                             <a href="{{ path('detail', {'id': event.id}) }}" class="btn btn-primary">plus de détails</a>
+                            {% if app.user.id == event.User.id %}
                             <a href="{{ path('modifierevent', {'id': event.id}) }}" class="btn btn-secondary">modifier</a>
                             <a href="{{ path('app_event_delete', {'id': event.id}) }}" class="btn btn-danger">supprimer</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

@@ -1,51 +1,225 @@
 {% extends 'base.html.twig'  %}
 {% block breadcrumb %}
- <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb-bg.jpg') }}">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="breadcrumb-text">
-                    <h2>Annonces</h2>
-                   
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb-bg.jpg') }}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Annonces</h2>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- Breadcrumb Section End -->
+    </section>
+    <!-- Breadcrumb Section End -->
 {% endblock  %}
 
  
 {% block body %}
 
-{{ form(form) }}
+    <style>
+        .profile-picture {
+            text-align: center;
+        }
+        .span-profile-name h5{
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 18px;
+        }
+
+        .profile-picture img {
+            width: 50px; /* Adjust as needed */
+            height: 50px; /* Adjust as needed */
+            border-radius: 50%; /* This makes the image round */
+            display: block;
+            margin: 0 auto; /* Centers the image horizontally */
+        }
+
+        .profile-picture span {
+            display: block;
+            margin-top: 5px;
+            color
+        }
+
+        .profile-picture a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .profile-picture a:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .dropdown-profile-options {
+            display: none;
+            position: absolute;
+            overflow: auto;
+        }
+
+        .dropdown-profile:hover .dropdown-profile-options {
+            display: block;
+        }
+        .dropdown-profile {
+            display: inline-block;
+            position: relative;.dropdown-options {
+                                   display: none;
+                                   position: absolute;
+                                   overflow: auto;
+                                   background-color:#fff;
+                                   border-radius:5px;
+                                   box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
+                               }
+
+        .dropdown-profile:hover .dropdown-profile-options {
+            display: block;
+        }
+
+        .dropdown-profile-options a {
+            display: block;
+            color: #ffffff;
+            padding: 5px;
+            text-decoration: none;
+            padding:20px 40px;
+        }
+
+        .dropdown-profile-options a:hover {
+            color: #0a0a23;
+            background-color: #ddd;
+            border-radius:5px;
+        }
+
+    </style>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+
+    <!-- Offcanvas Menu Section Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="canvas-close">
+            <i class="fa fa-close"></i>
+        </div>
+        <div class="canvas-search search-switch">
+            <i class="fa fa-search"></i>
+        </div>
+        <nav class="canvas-menu mobile-menu">
+            <ul>
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./about-us.html">About Us</a></li>
+                <li><a href="./classes.html">Classes</a></li>
+                <li><a href="./services.html">Services</a></li>
+                <li><a href="./team.html">Our Team</a></li>
+
+                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="{{path('app_login')}}">Connexion</a></li>
+            </ul>
+        </nav>
+        <div id="mobile-menu-wrap"></div>
+        <div class="canvas-social">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-youtube-play"></i></a>
+            <a href="#"><i class="fa fa-instagram"></i></a>
+        </div>
+    </div>
+    <!-- Offcanvas Menu Section End -->
+
+    <!-- Header Section Begin -->
+    <header class="header-section p-4">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="logo">
+                        <a href="./index.html">
+                            <img src="img/logo.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="nav-menu">
+                        <ul>
+                            <li class="active"><a href="./index.html">Home</a></li>
+                            <li><a href="./about-us.html">About Us</a></li>
+                            <li><a href="./class-details.html">Classes</a></li>
+                            <li><a href="./services.html">Evenement</a></li>
+                            <li><a href="./team.html">Our Team</a></li>
+                            <li><a href="#">Pages</a>
+
+                            </li>
+                            {% if not app.user %}
+                                <li><a href="{{path('app_login')}}">Connexion</a></li>
+                                <li><a href="{{path('app_registre')}}">Inscription</a></li>
+
+
+
+                            {% endif %}
+
+
+                        </ul>
+                    </nav>
+                </div>
+                {% if app.user %}
+                    <div class="col-lg-3">
+                        <div class="profile-picture">
+                            <div class="dropdown-profile">
+                                <a href="#" id="profile-link">
+                                    <img src="{{asset("uploads/brochures/image/" ~ app.user.ImageUrl)}}" alt="Profile Picture">
+                                    <span class="span-profile-name"><h5>{{app.user.username}}</h5></span>
+                                </a>
+                                <div class="dropdown-profile-options">
+                                    <a href="{{path('app_profile')}}">Setting</a>
+                                    <a href="{{path('app_logout')}}">Logout</a>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                {% endif %}
+            </div>
+            <div class="canvas-open">
+                <i class="fa fa-bars"></i>
+            </div>
+
+        </div>
+
+
+    </header>
+
+
+    {##just in case
 
 <section class="class-details-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="class-details-text">
-                        
+
                         {% for annonce in annonces %}
 
                         <div class="cd-text">
                             <div class="cd-single-item">
-                                
+
                                <div class="blog-item">
-                        
+
 
                         <div class="bi-pic">
                          {% if annonce.brochureFilename is not null %}
 
-                        
-                        <img  src="{{ asset('uploads/brochures/' ~ annonce.brochureFilename) }}" >                       
+
+                        <img  src="{{ asset('uploads/brochures/' ~ annonce.brochureFilename) }}" >
                          {% else %}
 
-                        <img src="img/blog/blog-1.jpg" alt="">                    
+                        <img src="img/blog/blog-1.jpg" alt="">
                           {% endif %}
                          </div>
-                         
+
                         <div class="bi-text">
                             <h5><a href="{{ path('showannonce', {'id': annonce.id}) }}">{{annonce.titre}}</a></h5>
                             <ul>
@@ -56,19 +230,19 @@
                             <p>{{annonce.description}}</p>
                         </div>
                     </div>
-                                                     
+
                                 <div class="latest-item">
 
                                 </div>
-                              
+
                             </div>
                             {% endfor %}
-                            
+
                         </div>
-                                            
 
 
-                         
+
+
                          <div class="blog-pagination">
                         <div class="pagination-container">
 <nav aria-label="Page navigation example">
@@ -104,31 +278,31 @@
 										{% endif %}
 									</ul>
 								</nav>
-					
+
 </div>
                     </div>
 
-                         
 
 
-                       
+
+
                     </div>
-                    
-                    
+
+
                 </div>
-                 
+
                 <div class="col-lg-4 col-md-8">
                     <div class="sidebar-option">
-                        
-                       
-                        
+
+
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
-   
-   
+
+
 
        <!-- Class Details Section Begin -->
     <section class="class-details-section spad">
@@ -137,25 +311,140 @@
                 <div class="col-lg-8">
                     <div class="class-details-text">
                         <div class="cd-pic">
-                            
-                        </div>
-                        
 
-                            
-                           
                         </div>
-                        
+
+
+
+
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
+     just in case##}
     <!-- Class Details Section End -->
-    <!-- styling for the comments -->
+
+<body>
+
+    <!-- Blog Section Begin -->
+    <section class="blog-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 p-0">
+
+                    <div style="padding-bottom: 20px; " >{{ form(form) }}</div>
+
+                    <h5 class="title">
+                        <a href="{{ path('addannonce') }}" style="color: rgb(243, 97, 0); text-decoration: none;">Ajouter une annonce</a>
+                    </h5>
+                    {% for annonce in annonces %}
+                        <div class="blog-item">
+                            <div class="bi-pic">
+                                {% if annonce.brochureFilename is not null %}
+                                    <img  src="{{ asset('uploads/brochures/' ~ annonce.brochureFilename) }}" >
+                                {% else %}
+                                    <img src="img/blog/blog-1.jpg" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="bi-text">
+                                <h5><a href="./blog-details.html">{{ annonce.titre }}</a></h5>
+                                <ul>
+                                    <li>{{ annonce.user.username }}</li>
+                                    <li>{{annonce.date|date("d/m/Y H:i") }}</li>
+                                    <li><a href="{{ path('showannonce', {'id': annonce.id}) }}" style=" color: rgb(243, 97, 0); ">Repondre</a></li>
+                                </ul>
+
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incididunt ut
+                                    labore et dolore magna aliqua accumsan lacus facilisis.</p>
+                                {% if app.user.id == annonce.user.id %}
+                                <span class="li-time">
+                                     <a href="{{path('editannonce',{'id':annonce.id})}}" style="color: white; text-decoration: inherit;">• edit</a>
+                                     </span>
+
+
+                                <span class="li-time">
+                                     <a href="{{path('deletannonce',{'id':annonce.id})}}" style="color: white; text-decoration: inherit;">• delete</a>
+                                     </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
 
 
 
-   
-   {% endblock %}
+
+                    <ul class="pagination justify-content-center">
+                        {% if CurrentPage > 1 %}
+                            <li class="page-item">
+                                <a hidden class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage - 1 }) }}">Précédent</a>
+                                <a class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage - 1 }) }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for page in 1..pagesCount %}
+                            {% if page == CurrentPage %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page }}</span>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ path('showdbannonce', {'page': page}) }}">{{ page }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if CurrentPage < pagesCount %}
+                            <li class="page-item">
+                                <a hidden class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage + 1 }) }}">Next</a>
+                                <a class="page-link" href="{{ path('showdbannonce', { 'page': CurrentPage + 1 }) }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
 
 
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+
+</body>
+    <!-- Get In Touch Section Begin -->
+    <div class="gettouch-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-map-marker"></i>
+                        <p>333 Middle Winchendon Rd, Rindge,<br/> NH 03461</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-mobile"></i>
+                        <ul>
+                            <li>125-711-811</li>
+                            <li>125-668-886</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text email">
+                        <i class="fa fa-envelope"></i>
+                        <p>Support.gymcenter@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
