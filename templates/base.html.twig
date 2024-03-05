@@ -26,6 +26,8 @@
             <!-- Google Font -->
             <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
             <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+
 
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -43,7 +45,10 @@
 
                
             {{ encore_entry_script_tags('app') }}
+
         {% endblock %}
+        <script src="{{asset('build/dist/index.global.js')}}"></script>
+        {% block calendar %}{% endblock %}
         
     </head>
     <body>
@@ -53,5 +58,12 @@
    
     
     {% endblock %}
+    <script src="//code.jquery.com/jquery.js"></script>
+
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+
+
+    {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
     </body>
+
 </html>

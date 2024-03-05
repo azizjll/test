@@ -1,0 +1,33 @@
+{% block title %}Courbe {% endblock %}
+
+
+{% block body %}
+ <h1>Statistiques des Événements par Nombre de Participations</h1>
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',  // Changez 'line' à 'bar' ou d'autres types de graphiques selon vos préférences
+            data: {
+                labels: [{% for event in events %}"{{ event.nom }}",{% endfor %}],
+                datasets: [{
+                    label: 'Participations',
+                    data: [{% for event in events %}{{ event.participationCount }},{% endfor %}],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',  // Couleur de fond
+                    borderColor: 'rgba(75, 192, 192, 1)',      // Couleur de la ligne
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+{% endblock %}
